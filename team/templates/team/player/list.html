@@ -1,0 +1,19 @@
+{% extends "team/base.html" %}
+
+{% block title %}Team{% endblock %}
+
+{% block content %}
+  <h1>Roster</h1>
+  <table>
+      <tr>
+          <th>Name</th>
+          <th>Positions</th>
+      </tr>
+      {% for player in players %}
+        <tr>
+            <td>{{ player.name }}</td>
+            <td>{{ player.is_goalie }}</td>
+        </tr>
+      {% endfor %}
+  </table>
+{% endblock %}
