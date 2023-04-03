@@ -1,0 +1,126 @@
+{% extends "team/base.html" %}
+
+{% comment %}
+The term Django uses for the information passed to a rendered template is context—-a template’s context is essentially
+a dictionary of key-value pairs, represented as a dict-like Context object when rendering takes place. You provide
+the context when calling a template’s render method, or more commonly as an argument to the helper function
+render_to_response.
+Django makes it possible to obtain a Form subclass for any model class or instance, using a special variation called
+ModelForm. A ModelForm is basically identical to a regular Form, but has a Meta inner class (similar to that of model
+classes), which has one required attribute, model, whose value is the Model class in question.
+The use of ModelForm “copies” your Model class’s fields into Form fields. This is generally straightforward—a model
+CharField becomes a form TextField or a ChoiceField if it defines choices—although there are a few caveats
+well-documented on the official Django site in a table. The main thing to keep in mind is fields are considered to
+be required=True unless the model has set them to be blank=True, in which case they become optional (required=False).
+{% endcomment %}
+
+{% block title %}Player{% endblock %}
+
+{% block content %}
+  <h1>{{ player.name }}</h1>
+  <form action="" method="post">
+      {% csrf_token %}
+      <table class="soccer_field">
+        <tr class="row1">
+          <td class="column1"></td>
+          <td class="column2"></td>
+          <td class="column3"></td>
+          <td class="column4"></td>
+          <td class="column5"></td>
+          <td class="column6"></td>
+          <td class="column7"></td>
+        </tr>
+        <tr class="row2">
+          <td class="column1"></td>
+          <td class="column2"></td>
+          <td class="column3 player">{{ form.is_left_striker }} Left Striker</td>
+          <td class="column4"></td>
+          <td class="column5 player">{{ form.is_right_striker }} Right Striker</td>
+          <td class="column6"></td>
+          <td class="column7"></td>
+        </tr>
+        <tr class="row3">
+          <td class="column1"></td>
+          <td class="column2"></td>
+          <td class="column3"></td>
+          <td class="column4"></td>
+          <td class="column5"></td>
+          <td class="column6"></td>
+          <td class="column7"></td>
+        </tr>
+        <tr class="row4">
+          <td class="column1"></td>
+          <td class="column2"></td>
+          <td class="column3"></td>
+          <td class="column4 player">{{ form.is_attacking_mid }} Attacking Mid</td>
+          <td class="column5"></td>
+          <td class="column6"></td>
+          <td class="column7"></td>
+        </tr>
+        <tr class="row5">
+          <td class="column1"></td>
+          <td class="column2 player">{{ form.is_left_mid }} Left Mid</td>
+          <td class="column3"></td>
+          <td class="column4"></td>
+          <td class="column5"></td>
+          <td class="column6 player">{{ form.is_right_mid }} Right Mid</td>
+          <td class="column7"></td>
+        </tr>
+        <tr class="row6">
+          <td class="column1"></td>
+          <td class="column2"></td>
+          <td class="column3"></td>
+          <td class="column4 player">{{ form.is_stopper }} Stopper</td>
+          <td class="column5"></td>
+          <td class="column6"></td>
+          <td class="column7"></td>
+        </tr>
+        <tr class="row7">
+          <td class="column1"></td>
+          <td class="column2"></td>
+          <td class="column3"></td>
+          <td class="column4"></td>
+          <td class="column5"></td>
+          <td class="column6"></td>
+          <td class="column7"></td>
+        </tr>
+        <tr class="row8">
+          <td class="column1"></td>
+          <td class="column2"></td>
+          <td class="column3 player">{{ form.is_center_back }} Center Back</td>
+          <td class="column4"></td>
+          <td class="column5 player">{{ form.is_sweeper }} Sweeper</td>
+          <td class="column6"></td>
+          <td class="column7"></td>
+        </tr>
+        <tr class="row9">
+          <td class="column1"></td>
+          <td class="column2 player">{{ form.is_left_full }} Left Full</td>
+          <td class="column3"></td>
+          <td class="column4"></td>
+          <td class="column5"></td>
+          <td class="column6 player">{{ form.is_right_full }} Right Full</td>
+          <td class="column7"></td>
+        </tr>
+        <tr class="row10">
+          <td class="column1"></td>
+          <td class="column2"></td>
+          <td class="column3"></td>
+          <td class="column4"></td>
+          <td class="column5"></td>
+          <td class="column6"></td>
+          <td class="column7"></td>
+        </tr>
+        <tr class="row11">
+          <td class="column1"></td>
+          <td class="column2"></td>
+          <td class="column3"></td>
+          <td class="column4 player">{{ form.is_goalie }} Goalie</td>
+          <td class="column5"></td>
+          <td class="column6"></td>
+          <td class="column7"></td>
+        </tr>
+    </table>
+    <input type="submit" value="Update Positions">
+  </form>
+{% endblock %}

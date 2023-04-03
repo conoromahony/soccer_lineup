@@ -29,5 +29,5 @@ app_name = 'team'
 #  - A name for the URL pattern, so we can refer to it elsewhere.
 urlpatterns = [
     path('team/player/list.html', views.player_list, name='player_list'),
-    path('team/player/<str:name>/detail.html', views.player_detail, name='player_detail'),
+    path('team/player/<str:name>/update.html', views.player_update, name='player_update'),
 ]

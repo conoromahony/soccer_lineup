@@ -4,15 +4,35 @@
 
 {% block content %}
   <h1>Roster</h1>
-  <table>
+  <table class="roster_list">
       <tr>
-          <th>Name</th>
-          <th>Positions</th>
+          <th id="leftmost_cell">Name</th>
+          <th>Goalie</th>
+          <th>Left Full</th>
+          <th>Right Full</th>
+          <th>Center Back</th>
+          <th>Sweeper</th>
+          <th>Stopper</th>
+          <th>Left Mid</th>
+          <th>Right Mid</th>
+          <th>Attacking Mid</th>
+          <th>Left Striker</th>
+          <th id="rightmost_cell">Right Striker</th>
       </tr>
       {% for player in players %}
         <tr>
-            <td>{{ player.name }}</td>
-            <td>{{ player.is_goalie }}</td>
+            <td id="leftmost_cell"><a href="/team/player/{{ player.name }}/update.html">{{ player.name }}</a></td>
+            <td>{{ player.is_goalie|yesno:"Yes," }}</td>
+            <td>{{ player.is_left_full|yesno:"Yes," }}</td>
+            <td>{{ player.is_right_full|yesno:"Yes," }}</td>
+            <td>{{ player.is_center_back|yesno:"Yes," }}</td>
+            <td>{{ player.is_sweeper|yesno:"Yes," }}</td>
+            <td>{{ player.is_stopper|yesno:"Yes," }}</td>
+            <td>{{ player.is_left_mid|yesno:"Yes," }}</td>
+            <td>{{ player.is_right_mid|yesno:"Yes," }}</td>
+            <td>{{ player.is_attacking_mid|yesno:"Yes," }}</td>
+            <td>{{ player.is_left_striker|yesno:"Yes," }}</td>
+            <td>{{ player.is_right_striker|yesno:"Yes," }}</td>
         </tr>
       {% endfor %}
   </table>

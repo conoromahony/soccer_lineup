@@ -1,0 +1,91 @@
+.roster_list{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Oxygen-Sans, Ubuntu, Cantarell, “Helvetica Neue”, Arial, sans-serif;
+    border-collapse: collapse;
+    margin: 25px 0;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    width: 75%;
+}
+
+.roster_list tr:nth-of-type(even){
+    background-color: #f3f3f3;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Oxygen-Sans, Ubuntu, Cantarell, “Helvetica Neue”, Arial, sans-serif;
+    border-bottom: 1px solid #dddddd;
+}
+
+.roster_list tr::last-of-type{
+    border-bottom: 2px solid #009879;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Oxygen-Sans, Ubuntu, Cantarell, “Helvetica Neue”, Arial, sans-serif;
+}
+
+.roster_list th{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Oxygen-Sans, Ubuntu, Cantarell, “Helvetica Neue”, Arial, sans-serif;
+    background-color: #009879;
+    color: #ffffff;
+    padding: 12px 15px;
+    text-align: center;
+}
+
+.roster_list td{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Oxygen-Sans, Ubuntu, Cantarell, “Helvetica Neue”, Arial, sans-serif;
+    padding: 12px 15px;
+    text-align: center;
+}
+
+th#leftmost_cell{
+    border-top-left-radius: 15px;
+    text-align: left;
+}
+
+th#rightmost_cell{
+    border-top-right-radius: 15px;
+}
+
+td#leftmost_cell{
+    text-align: left;
+}
+
+.soccer_field{
+    background-color: #009879;
+    border-collapse: collapse;
+    margin: 25px 0;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+.soccer_field tr.row1{
+    height: 75px;
+}
+
+.soccer_field tr.row3{
+    height: 75px;
+}
+
+.soccer_field tr.row7{
+    height: 75px;
+}
+
+.soccer_field tr.row10{
+    height: 75px;
+}
+
+.soccer_field td{
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Oxygen-Sans, Ubuntu, Cantarell, “Helvetica Neue”, Arial, sans-serif;
+    background-color: #009879;
+    color: #ffffff;
+    padding: 12px 15px;
+    text-align: center;
+}
+
+.soccer_field td.column1{
+    min-width: 50px;
+}
+
+.soccer_field td.column7{
+    min-width: 50px;
+}
+
+.soccer_field td.player{
+    background-color: #009860;
+}
