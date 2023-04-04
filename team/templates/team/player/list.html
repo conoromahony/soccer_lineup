@@ -3,7 +3,7 @@
 {% block title %}Team{% endblock %}
 
 {% block content %}
-  <h1>Roster</h1>
+  <h1>Team</h1>
   <table class="roster_list">
       <tr>
           <th id="leftmost_cell">Name</th>
@@ -35,5 +35,8 @@
             <td>{{ player.is_right_striker|yesno:"Yes," }}</td>
         </tr>
       {% endfor %}
+      <tr>
+          <td id="leftmost_cell" colspan="12"><a class="lineup_button" href="/team/player/add.html">Add Player</a></td>
+      </tr>
   </table>
 {% endblock %}

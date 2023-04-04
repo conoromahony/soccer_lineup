@@ -1,30 +1,25 @@
 {% extends "team/base.html" %}
 
-{% comment %}
-The term Django uses for the information passed to a rendered template is context—-a template’s context is essentially
-a dictionary of key-value pairs, represented as a dict-like Context object when rendering takes place. You provide
-the context when calling a template’s render method, or more commonly as an argument to the helper function
-render_to_response.
-Django makes it possible to obtain a Form subclass for any model class or instance, using a special variation called
-ModelForm. A ModelForm is basically identical to a regular Form, but has a Meta inner class (similar to that of model
-classes), which has one required attribute, model, whose value is the Model class in question.
-The use of ModelForm “copies” your Model class’s fields into Form fields. This is generally straightforward—a model
-CharField becomes a form TextField or a ChoiceField if it defines choices—although there are a few caveats
-well-documented on the official Django site in a table. The main thing to keep in mind is fields are considered to
-be required=True unless the model has set them to be blank=True, in which case they become optional (required=False).
-{% endcomment %}
-
-{% block title %}Update an Existing Player{% endblock %}
+{% block title %}Add a New Player{% endblock %}
 
 {% block content %}
   <a class="lineup_button" href="/team/player/list.html">⬅ Return to Team</a>
-
-  <h1>{{ player.name }}</h1>
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
   <form action="" method="post">
       {% csrf_token %}
       <div class="soccer_pitch">
       <table class="soccer_field">
         <tr class="row1">
+          <td class="left_span" colspan="6">Player Name: {{ form.name }}</td>
+        </tr>
+        <tr class="row1">
+          <td class="column1"></td>
           <td class="column2"></td>
           <td class="column3"></td>
           <td class="column4"></td>
@@ -32,6 +27,7 @@ be required=True unless the model has set them to be blank=True, in which case t
           <td class="column6"></td>
         </tr>
         <tr class="row2">
+          <td class="column1"></td>
           <td class="column2"></td>
           <td class="column3 player">{{ form.is_left_striker }} Left Striker</td>
           <td class="column4"></td>
@@ -39,6 +35,7 @@ be required=True unless the model has set them to be blank=True, in which case t
           <td class="column6"></td>
         </tr>
         <tr class="row3">
+          <td class="column1"></td>
           <td class="column2"></td>
           <td class="column3"></td>
           <td class="column4"></td>
@@ -46,6 +43,7 @@ be required=True unless the model has set them to be blank=True, in which case t
           <td class="column6"></td>
         </tr>
         <tr class="row4">
+          <td class="column1"></td>
           <td class="column2"></td>
           <td class="column3"></td>
           <td class="column4 player">{{ form.is_attacking_mid }} Attacking Mid</td>
@@ -53,6 +51,7 @@ be required=True unless the model has set them to be blank=True, in which case t
           <td class="column6"></td>
         </tr>
         <tr class="row5">
+          <td class="column1"></td>
           <td class="column2 player">{{ form.is_left_mid }} Left Mid</td>
           <td class="column3"></td>
           <td class="column4"></td>
@@ -60,6 +59,7 @@ be required=True unless the model has set them to be blank=True, in which case t
           <td class="column6 player">{{ form.is_right_mid }} Right Mid</td>
         </tr>
         <tr class="row6">
+          <td class="column1"></td>
           <td class="column2"></td>
           <td class="column3"></td>
           <td class="column4 player">{{ form.is_stopper }} Stopper</td>
@@ -67,6 +67,7 @@ be required=True unless the model has set them to be blank=True, in which case t
           <td class="column6"></td>
         </tr>
         <tr class="row7">
+          <td class="column1"></td>
           <td class="column2"></td>
           <td class="column3"></td>
           <td class="column4"></td>
@@ -74,6 +75,7 @@ be required=True unless the model has set them to be blank=True, in which case t
           <td class="column6"></td>
         </tr>
         <tr class="row8">
+          <td class="column1"></td>
           <td class="column2"></td>
           <td class="column3 player">{{ form.is_center_back }} Center Back</td>
           <td class="column4"></td>
@@ -81,6 +83,7 @@ be required=True unless the model has set them to be blank=True, in which case t
           <td class="column6"></td>
         </tr>
         <tr class="row9">
+          <td class="column1"></td>
           <td class="column2 player">{{ form.is_left_full }} Left Full</td>
           <td class="column3"></td>
           <td class="column4"></td>
@@ -88,6 +91,15 @@ be required=True unless the model has set them to be blank=True, in which case t
           <td class="column6 player">{{ form.is_right_full }} Right Full</td>
         </tr>
         <tr class="row10">
+          <td class="column1"></td>
+          <td class="column2"></td>
+          <td class="column3"></td>
+          <td class="column4"></td>
+          <td class="column5"></td>
+          <td class="column6"></td>
+        </tr>
+        <tr class="row12">
+          <td class="column1"></td>
           <td class="column2"></td>
           <td class="column3"></td>
           <td class="column4"></td>
@@ -95,6 +107,7 @@ be required=True unless the model has set them to be blank=True, in which case t
           <td class="column6"></td>
         </tr>
         <tr class="row11">
+          <td class="column1"></td>
           <td class="column2"></td>
           <td class="column3"></td>
           <td class="column4 player">{{ form.is_goalie }} Goalie</td>
@@ -102,15 +115,15 @@ be required=True unless the model has set them to be blank=True, in which case t
           <td class="column6"></td>
         </tr>
         <tr class="row12">
+          <td class="column1"></td>
           <td class="column2"></td>
           <td class="column3"></td>
           <td class="column4"></td>
           <td class="column5"></td>
           <td class="column6"></td>
         </tr>
-     </table>
+    </table>
     </div>
-    <input class="lineup_button" name="update_submit" type="submit" value="Update Positions">
-    <input class="lineup_button" name="update_delete" type="submit" value="Delete Player">
+    <input class="lineup_button" type="submit" value="Add Player">
   </form>
 {% endblock %}

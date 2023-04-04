@@ -30,4 +30,5 @@ app_name = 'team'
 urlpatterns = [
     path('team/player/list.html', views.player_list, name='player_list'),
     path('team/player/<str:name>/update.html', views.player_update, name='player_update'),
+    path('team/player/add.html', views.player_add, name='player_add')
 ]
