@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-from .models import Player
-from .forms import ChoosePositionsForm, NewPlayerForm
+from .models import Player, Team
+from .forms import ChoosePositionsForm, NewPlayerForm, NewTeamForm
 from django.forms.models import model_to_dict
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
@@ -11,9 +11,11 @@ def player_list(request):
     # This view displays the roster of players.
     # We retrieve the list of players using the "all_players" manager defined in models.py.
     players = Player.all_players.all()
+    team = get_object_or_404(Team, team_name='Lions')
+    form = NewTeamForm(instance=team)
     # Call the "render" function, passing the original request object, the template used to build the page,
     # and the data needed to build the page.
-    return render(request, 'team/player/list.html', {'players': players})
+    return render(request, 'team/player/list.html', {'players': players, 'team': team, 'form': form})
 
 
 @csrf_protect

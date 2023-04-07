@@ -3,40 +3,55 @@
 {% block title %}Team{% endblock %}
 
 {% block content %}
-  <h1>Team</h1>
-  <table class="roster_list">
-      <tr>
-          <th id="leftmost_cell">Name</th>
-          <th>Goalie</th>
-          <th>Left Full</th>
-          <th>Right Full</th>
-          <th>Center Back</th>
-          <th>Sweeper</th>
-          <th>Stopper</th>
-          <th>Left Mid</th>
-          <th>Right Mid</th>
-          <th>Attacking Mid</th>
-          <th>Left Striker</th>
-          <th id="rightmost_cell">Right Striker</th>
-      </tr>
-      {% for player in players %}
-        <tr>
-            <td id="leftmost_cell"><a href="/team/player/{{ player.name }}/update.html">{{ player.name }}</a></td>
-            <td>{{ player.is_goalie|yesno:"Yes," }}</td>
-            <td>{{ player.is_left_full|yesno:"Yes," }}</td>
-            <td>{{ player.is_right_full|yesno:"Yes," }}</td>
-            <td>{{ player.is_center_back|yesno:"Yes," }}</td>
-            <td>{{ player.is_sweeper|yesno:"Yes," }}</td>
-            <td>{{ player.is_stopper|yesno:"Yes," }}</td>
-            <td>{{ player.is_left_mid|yesno:"Yes," }}</td>
-            <td>{{ player.is_right_mid|yesno:"Yes," }}</td>
-            <td>{{ player.is_attacking_mid|yesno:"Yes," }}</td>
-            <td>{{ player.is_left_striker|yesno:"Yes," }}</td>
-            <td>{{ player.is_right_striker|yesno:"Yes," }}</td>
-        </tr>
-      {% endfor %}
-      <tr>
-          <td id="leftmost_cell" colspan="12"><a class="lineup_button" href="/team/player/add.html">Add Player</a></td>
-      </tr>
-  </table>
+    <form action="" method="post">
+        {% csrf_token %}
+        <p class="h1">Team Name: {{ team.team_name }}</p>
+        <div class="row">
+            {% for field in form %}
+                {{ field.errors }}
+                <div class="col-md-4" class="form-select">{{ field.label_tag }} {{ field }}</div>
+            {% endfor %}
+        </div>
+    </form>
+
+    <!-- table class="roster_list" -->
+    <table class="roster-list text-nowrap">
+        <thead>
+            <tr>
+                <th id="leftmost-cell">Name</th>
+                <th>Goalie</th>
+                <th>Left Full</th>
+                <th>Right Full</th>
+                <th>Center Back</th>
+                <th>Sweeper</th>
+                <th>Stopper</th>
+                <th>Left Mid</th>
+                <th>Right Mid</th>
+                <th>Attacking Mid</th>
+                <th>Left Striker</th>
+                <th id="rightmost-cell">Right Striker</th
+            </tr>
+        </thead>
+        <tbody>
+            {% for player in players %}
+                <tr>
+                    <td id="leftmost-cell"><a href="/team/player/{{ player.name }}/update.html">{{ player.name }}</a></td>
+                    <td>{{ player.is_goalie|yesno:"Yes," }}</td>
+                    <td>{{ player.is_left_full|yesno:"Yes," }}</td>
+                    <td>{{ player.is_right_full|yesno:"Yes," }}</td>
+                    <td>{{ player.is_center_back|yesno:"Yes," }}</td>
+                    <td>{{ player.is_sweeper|yesno:"Yes," }}</td>
+                    <td>{{ player.is_stopper|yesno:"Yes," }}</td>
+                    <td>{{ player.is_left_mid|yesno:"Yes," }}</td>
+                    <td>{{ player.is_right_mid|yesno:"Yes," }}</td>
+                    <td>{{ player.is_attacking_mid|yesno:"Yes," }}</td>
+                    <td>{{ player.is_left_striker|yesno:"Yes," }}</td>
+                    <td>{{ player.is_right_striker|yesno:"Yes," }}</td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td id="leftmost-cell" colspan="12"><a class="lineup_button" href="/team/player/add.html">Add Player</a></td>
+            </tr>
+        </tbody>
+    </table>
 {% endblock %}

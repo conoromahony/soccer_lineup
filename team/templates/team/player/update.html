@@ -17,100 +17,100 @@ be required=True unless the model has set them to be blank=True, in which case t
 {% block title %}Update an Existing Player{% endblock %}
 
 {% block content %}
-  <a class="lineup_button" href="/team/player/list.html">⬅ Return to Team</a>
+  <p><a class="lineup_button" href="/team/player/list.html">⬅ Return to Team</a></p>
 
   <h1>{{ player.name }}</h1>
   <form action="" method="post">
       {% csrf_token %}
       <div class="soccer_pitch">
-      <table class="soccer_field">
-        <tr class="row1">
-          <td class="column2"></td>
-          <td class="column3"></td>
-          <td class="column4"></td>
-          <td class="column5"></td>
-          <td class="column6"></td>
-        </tr>
-        <tr class="row2">
-          <td class="column2"></td>
-          <td class="column3 player">{{ form.is_left_striker }} Left Striker</td>
-          <td class="column4"></td>
-          <td class="column5 player">{{ form.is_right_striker }} Right Striker</td>
-          <td class="column6"></td>
-        </tr>
-        <tr class="row3">
-          <td class="column2"></td>
-          <td class="column3"></td>
-          <td class="column4"></td>
-          <td class="column5"></td>
-          <td class="column6"></td>
-        </tr>
-        <tr class="row4">
-          <td class="column2"></td>
-          <td class="column3"></td>
-          <td class="column4 player">{{ form.is_attacking_mid }} Attacking Mid</td>
-          <td class="column5"></td>
-          <td class="column6"></td>
-        </tr>
-        <tr class="row5">
-          <td class="column2 player">{{ form.is_left_mid }} Left Mid</td>
-          <td class="column3"></td>
-          <td class="column4"></td>
-          <td class="column5"></td>
-          <td class="column6 player">{{ form.is_right_mid }} Right Mid</td>
-        </tr>
-        <tr class="row6">
-          <td class="column2"></td>
-          <td class="column3"></td>
-          <td class="column4 player">{{ form.is_stopper }} Stopper</td>
-          <td class="column5"></td>
-          <td class="column6"></td>
-        </tr>
-        <tr class="row7">
-          <td class="column2"></td>
-          <td class="column3"></td>
-          <td class="column4"></td>
-          <td class="column5"></td>
-          <td class="column6"></td>
-        </tr>
-        <tr class="row8">
-          <td class="column2"></td>
-          <td class="column3 player">{{ form.is_center_back }} Center Back</td>
-          <td class="column4"></td>
-          <td class="column5 player">{{ form.is_sweeper }} Sweeper</td>
-          <td class="column6"></td>
-        </tr>
-        <tr class="row9">
-          <td class="column2 player">{{ form.is_left_full }} Left Full</td>
-          <td class="column3"></td>
-          <td class="column4"></td>
-          <td class="column5"></td>
-          <td class="column6 player">{{ form.is_right_full }} Right Full</td>
-        </tr>
-        <tr class="row10">
-          <td class="column2"></td>
-          <td class="column3"></td>
-          <td class="column4"></td>
-          <td class="column5"></td>
-          <td class="column6"></td>
-        </tr>
-        <tr class="row11">
-          <td class="column2"></td>
-          <td class="column3"></td>
-          <td class="column4 player">{{ form.is_goalie }} Goalie</td>
-          <td class="column5"></td>
-          <td class="column6"></td>
-        </tr>
-        <tr class="row12">
-          <td class="column2"></td>
-          <td class="column3"></td>
-          <td class="column4"></td>
-          <td class="column5"></td>
-          <td class="column6"></td>
-        </tr>
-     </table>
-    </div>
-    <input class="lineup_button" name="update_submit" type="submit" value="Update Positions">
-    <input class="lineup_button" name="update_delete" type="submit" value="Delete Player">
+        <table class="soccer_field">
+          <tr class="row1">
+            <td class="column2"></td>
+            <td class="column3"></td>
+            <td class="column4"></td>
+            <td class="column5"></td>
+            <td class="column6"></td>
+          </tr>
+          <tr class="row2">
+            <td class="column2"></td>
+            <td class="column3 player">{{ form.is_left_striker }} Left Striker</td>
+            <td class="column4"></td>
+            <td class="column5 player">{{ form.is_right_striker }} Right Striker</td>
+            <td class="column6"></td>
+          </tr>
+          <tr class="row3">
+            <td class="column2"></td>
+            <td class="column3"></td>
+            <td class="column4"></td>
+            <td class="column5"></td>
+            <td class="column6"></td>
+          </tr>
+          <tr class="row4">
+            <td class="column2"></td>
+            <td class="column3"></td>
+            <td class="column4 player">{{ form.is_attacking_mid }} Attacking Mid</td>
+            <td class="column5"></td>
+            <td class="column6"></td>
+          </tr>
+          <tr class="row5">
+            <td class="column2 player">{{ form.is_left_mid }} Left Mid</td>
+            <td class="column3"></td>
+            <td class="column4"></td>
+            <td class="column5"></td>
+            <td class="column6 player">{{ form.is_right_mid }} Right Mid</td>
+          </tr>
+          <tr class="row6">
+            <td class="column2"></td>
+            <td class="column3"></td>
+            <td class="column4 player">{{ form.is_stopper }} Stopper</td>
+            <td class="column5"></td>
+            <td class="column6"></td>
+          </tr>
+          <tr class="row7">
+            <td class="column2"></td>
+            <td class="column3"></td>
+            <td class="column4"></td>
+            <td class="column5"></td>
+            <td class="column6"></td>
+          </tr>
+          <tr class="row8">
+            <td class="column2"></td>
+            <td class="column3 player">{{ form.is_center_back }} Center Back</td>
+            <td class="column4"></td>
+            <td class="column5 player">{{ form.is_sweeper }} Sweeper</td>
+            <td class="column6"></td>
+          </tr>
+          <tr class="row9">
+            <td class="column2 player">{{ form.is_left_full }} Left Full</td>
+            <td class="column3"></td>
+            <td class="column4"></td>
+            <td class="column5"></td>
+            <td class="column6 player">{{ form.is_right_full }} Right Full</td>
+          </tr>
+          <tr class="row10">
+            <td class="column2"></td>
+            <td class="column3"></td>
+            <td class="column4"></td>
+            <td class="column5"></td>
+            <td class="column6"></td>
+          </tr>
+          <tr class="row11">
+            <td class="column2"></td>
+            <td class="column3"></td>
+            <td class="column4 player">{{ form.is_goalie }} Goalie</td>
+            <td class="column5"></td>
+            <td class="column6"></td>
+          </tr>
+          <tr class="row12">
+            <td class="column2"></td>
+            <td class="column3"></td>
+            <td class="column4"></td>
+            <td class="column5"></td>
+            <td class="column6"></td>
+          </tr>
+        </table>
+      </div>
+      <input class="lineup_button" name="update_submit" type="submit" value="Update Positions">
+      <input class="lineup_button" name="update_delete" type="submit" value="Delete Player">
   </form>
 {% endblock %}
