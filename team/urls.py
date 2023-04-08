@@ -28,7 +28,7 @@ app_name = 'team'
 #  - The function to call in views.py.
 #  - A name for the URL pattern, so we can refer to it elsewhere.
 urlpatterns = [
-    path('team/player/list.html', views.player_list, name='player_list'),
-    path('team/player/<str:name>/update.html', views.player_update, name='player_update'),
-    path('team/player/add.html', views.player_add, name='player_add')
+    path('player/list.html', views.player_list, name='player_list'),
+    path('player/<str:name>/update.html', views.player_update, name='player_update'),
+    path('player/add.html', views.player_add, name='player_add')
 ]

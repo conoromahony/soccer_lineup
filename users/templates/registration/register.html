@@ -1,0 +1,12 @@
+{% extends "home/base.html" %}
+
+{% block title %}Create New User{% endblock %}
+
+{% block content %}
+  <form method="post" action="{% url 'users:register' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button name="submit">Create User</button>
+    <input type="hidden" name="next" value="/home/index.html" />
+  </form>
+{% endblock content %}

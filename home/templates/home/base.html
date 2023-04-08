@@ -1,0 +1,33 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    <link href="{% static "css/team.css" %}" rel="stylesheet">
+    {% bootstrap_javascript %}
+</head>
+<body>
+    <div class="container-fluid container-md container pt-5">
+        <p>
+            <a href="/home/index.html">Home</a> -
+            <a href="/team/player/list.html">Team</a> -
+            <a href="/lineup/generate.html">Lineup</a>
+        </p>
+        <p>
+            {% if user.is_authenticated %}
+                Hello, {{ user.username }}.
+                <a href="{% url 'users:logout' %}">Log out</a>
+            {% else %}
+                <a href="{% url 'users:register' %}">Create User</a>
+                <a href="{% url 'users:login' %}">Log in</a>
+            {% endif %}
+        </p>
+        {% block content %}
+        {% endblock content %}
+    </div>
+</body>
+</html>
