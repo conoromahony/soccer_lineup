@@ -11,21 +11,32 @@
     {% bootstrap_javascript %}
 </head>
 <body>
-    <div class="container-fluid container-md container pt-5">
-        <p>
-            <a href="/home/index.html">Home</a> -
-            <a href="/team/player/list.html">Team</a> -
-            <a href="/lineup/generate.html">Lineup</a>
-        </p>
-        <p>
-            {% if user.is_authenticated %}
-                Hello, {{ user.username }}.
-                <a href="{% url 'users:logout' %}">Log out</a>
-            {% else %}
-                <a href="{% url 'users:register' %}">Create User</a>
-                <a href="{% url 'users:login' %}">Log in</a>
-            {% endif %}
-        </p>
+    <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #009879;">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a href="/home/index.html" class="nav-link px-3 ms-4 fw-bold text-white">Home</a></li>
+                    <li class="nav-item"><a href="/lineup/generate.htm" class="nav-link px-3 fw-bold text-white">Lineup</a></li>
+                    <li class="nav-item"><a href="/team/player/list.html" class="nav-link px-3 fw-bold text-white">Team</a></li>
+                    <li class="nav-item"><a href="/home/faqs.html" class="nav-link px-3 fw-bold text-white">FAQs</a></li>
+                    <li class="nav-item"><a href="/home/about.html" class="nav-link px-3 fw-bold text-white">About</a></li>
+                </ul>
+                <span class="navbar-text">
+                    <ul class="navbar-nav text-end">
+                        {% if user.is_authenticated %}
+                            <li><a href="#" class="nav-link link-dark px-2">User: {{ user.username }}</a></li>
+                            <li><a href="{% url 'users:logout' %}" class="nav-link link-dark px-2 me-4 text-white">Log Out</a></li>
+                        {% else %}
+                            <li><a href="{% url 'users:login' %}" class="nav-link link-dark px-2 text-white"><button type="button" class="btn btn-outline-light me-2">Log In</button></a></li>
+                            <li><a href="{% url 'users:register' %}" class="nav-link link-dark px-2 text-white"><button type="button" class="btn btn-warning">Create User</button></a></li>
+                        {% endif %}
+                    </ul>
+                </span>
+            </div>
+        </nav>
+    </div>
+
+    <div class="container mt-5">
         {% block content %}
         {% endblock content %}
     </div>
