@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.http import Http404
 
 from .models import Player, Team
 from .forms import ChoosePositionsForm, NewPlayerForm, NewTeamForm
@@ -27,6 +28,10 @@ def player_list(request):
 @csrf_protect
 def player_update(request, name):
     player = get_object_or_404(Player, name=name)
+    team = Team.objects.get(owner=request.user)
+    my_team_name = team.team_name
+    if player.team_name != my_team_name:
+        raise Http404
     # We use the same view for both displaying the form and for processing the submitted data.
     # If we receive a GET request, we display the form.
     # If we receive a POST request, the form is submitted and processed.
@@ -39,9 +44,6 @@ def player_update(request, name):
                 form.save()
         elif 'update_delete' in request.POST:
             player.delete()
-        # players = Player.all_players.all()
-        team = Team.objects.get(owner=request.user)
-        my_team_name = team.team_name
         players = Player.objects.filter(team_name=my_team_name)
         return render(request, 'team/player/list.html', {'players': players})
     # When the view is loaded initially with a GET request, display the form.
