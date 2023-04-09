@@ -1,11 +1,13 @@
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import User
+
 
 # Create your models here.
-class AllPlayers(models.Manager):
-    def get_queryset(self):
-        return super(AllPlayers, self).get_queryset()
+#class AllPlayers(models.Manager):
+#    def get_queryset(self):
+#        return super(AllPlayers, self).get_queryset()
 
 
 class Player(models.Model):
@@ -23,7 +25,7 @@ class Player(models.Model):
     is_left_striker = models.BooleanField()
     is_right_striker = models.BooleanField()
     objects = models.Manager()      # The default manager
-    all_players = AllPlayers()      # Custom Manager to return all players
+    #all_players = AllPlayers()      # Custom Manager to return all players
 
     def __str__(self):
         # Returns a string representation of the model.
@@ -66,3 +68,8 @@ class Team(models.Model):
         choices=HalfDuration.choices,
         default=HalfDuration.THIRTY_FIVE,
     )
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        # Returns a string representation of the model.
+        return self.team_name
