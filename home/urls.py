@@ -14,4 +14,5 @@ app_name = 'home'
 #  - A name for the URL pattern, so we can refer to it elsewhere.
 urlpatterns = [
     path('index.html', views.home, name='home_page'),
+    path('faqs.html', views.faqs, name='faqs_page'),
 ]
