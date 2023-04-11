@@ -25,7 +25,7 @@
                     <ul class="navbar-nav text-end">
                         {% if user.is_authenticated %}
                             <li><a href="#" class="nav-link link-dark px-2">User: {{ user.username }}</a></li>
-                            <li><a href="{% url 'users:logout' %}" class="nav-link link-dark px-2 me-4 text-white">Log Out</a></li>
+                            <li><a href="{% url 'users:login' %}" class="nav-link link-dark px-2 me-4 text-white">Log Out</a></li>
                         {% else %}
                             <li><a href="{% url 'users:login' %}" class="nav-link link-dark px-2 text-white"><button type="button" class="btn btn-outline-light me-2">Log In</button></a></li>
                             <li><a href="{% url 'users:register' %}" class="nav-link link-dark px-2 text-white"><button type="button" class="btn btn-warning">Create User</button></a></li>
