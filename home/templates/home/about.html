@@ -1,0 +1,30 @@
+{% extends "home/base.html" %}
+{% load static %}
+{% block title %}About the Soccer Lineup Generator{% endblock %}
+{% block content %}
+    <h3 class="pb-4">About This Website</h3>
+    <div class="row d-flex flex-wrap align-items-center pb-5">
+        <div class="col-7" style="font-family:Chalkduster,'Bradley Hand','Comic Sans MS',cursive; font-size: 1.2em;">
+            <p>Hi there,<br />
+            <br />I created this website after consistently spending too much time painstakingly planning my team's
+            substitution schedule each week in an attempt to ensure players got equal playing time. After doing this
+            for a season, I thought there has to be a better way. I created this website to automate what I had been
+            manually doing each week, and I thought I'd share it with others in case it can save them time as well.
+            I hope it works for you. If you have suggestions on how to improve it, please let me know. I can't
+            promise to incorporate every request, but if enough people are requesting a particular capability, I'll
+            try to incorporate it.<br />
+            <br />Best regards,
+            <br />Conor.</p>
+        </div>
+        <div class="col-5">
+            <img src="{% static 'images/cartoon-team.jpeg' %}" class="shadow-lg rounded img-fluid">
+        </div>
+    </div>
+
+    <h3 class="pb-4">Give me Feedback</h3>
+    <form action="/home/thanks.html" method="post">
+        {% csrf_token %}
+        {{ form.as_div }}
+        <input class="lineup_button" type="submit" value="Send Feedback">
+    </form>
+{% endblock %}

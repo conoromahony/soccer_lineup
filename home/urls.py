@@ -15,4 +15,6 @@ app_name = 'home'
 urlpatterns = [
     path('index.html', views.home, name='home_page'),
     path('faqs.html', views.faqs, name='faqs_page'),
+    path('about.html', views.about, name='about_page'),
+    path('thanks.html', views.thanks, name='thanks_page'),
 ]

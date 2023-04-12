@@ -5,11 +5,6 @@ from django.contrib.auth.models import User
 
 
 # Create your models here.
-#class AllPlayers(models.Manager):
-#    def get_queryset(self):
-#        return super(AllPlayers, self).get_queryset()
-
-
 class Player(models.Model):
     name = models.CharField(max_length=20)
     team_name = models.CharField(max_length=20)
@@ -25,7 +20,6 @@ class Player(models.Model):
     is_left_striker = models.BooleanField()
     is_right_striker = models.BooleanField()
     objects = models.Manager()      # The default manager
-    #all_players = AllPlayers()      # Custom Manager to return all players
 
     def __str__(self):
         # Returns a string representation of the model.
