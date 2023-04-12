@@ -5,7 +5,7 @@
 {% block content %}
     <form action="" method="post">
         {% csrf_token %}
-        <p class="h1">Team Name: {{ team.team_name }}</p>
+        <h3 class="pb-4">Team Name: {{ team.team_name }}</h3>
         <div class="row">
             {% for field in form %}
                 {{ field.errors }}
