@@ -22,4 +22,5 @@ urlpatterns = [
     path('home/', include('home.urls', namespace='home')),
     path('team/', include('team.urls', namespace='team')),
     path('users/', include('users.urls', namespace='users')),
+    path('lineups/', include('lineups.urls', namespace='lineups')),
 ]
