@@ -5,14 +5,15 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404
 
 from .models import Lineup
+from team.models import Team
 from .forms import NewLineupForm
 
 
 # Create your views here.
 @login_required
 def lineup_list(request):
-    lineups = Lineup.objects.get(owner=request.user)
-    return render(request, 'lineup/list.html', {'lineups': lineups})
+    lineups = Lineup.objects.filter(owner=request.user)
+    return render(request, 'lineups/list.html', {'lineups': lineups})
 
 
 @login_required
@@ -40,18 +41,25 @@ def view_lineup(request, lineup_id):
 @login_required
 @csrf_protect
 def new_lineup(request):
+    team = Team.objects.get(owner=request.user)
+    my_team_name = team.team_name
+    number_of_minutes = 2 * team.half_duration
+    number_players = 15
+    number_subs = number_players - int(team.team_size)
+    number_outfield = int(team.team_size) - 1
     if request.method == 'POST':
         form = NewLineupForm(request.POST)
         if form.is_valid():
-            lineup_id = "test"
-            if not Lineup.objects.filter(lineup_id=lineup_id).exists():
-                form.save()
+            lineup_id = form.cleaned_data['opponent'] + str(form.cleaned_data['game_date'])
+            if not Lineup.objects.filter(game_id=lineup_id).exists():
+                instance = form.save(commit=False)
+                instance.game_id = lineup_id
+                instance.owner = request.user
+                instance.save()
             else:
                 messages.error(request, 'Lineup already exists.')
                 return render(request, 'lineups/list.html')
         return render(request, 'lineups/list.html')
     else:
         form = NewLineupForm()
-    return render(request, 'lineups/new_lineup.html', {'form': form})
-
-# Create your views here.
+    return render(request, 'lineups/new_lineup.html', {'form': form, 'team': team})

@@ -12,6 +12,10 @@
   {% endif %}
   <form action="" method="post">
       {% csrf_token %}
+      {{ team.team_name }}
+      {{ team.half_duration }}
+      {{ team.team_size }}
+      {{ form.as_p }}
       <input class="lineup_button" type="submit" value="Generate Lineup">
   </form>
 {% endblock %}

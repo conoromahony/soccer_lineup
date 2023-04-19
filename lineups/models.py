@@ -22,6 +22,8 @@ class Lineup(models.Model):
         # FORTY_FIVE = "45", _("45 minutes")
 
     game_id = models.CharField(max_length=20)
+    opponent = models.CharField(max_length=20, default='')
+    game_date = models.DateField()
     team_name = models.CharField(max_length=20)
     team_size = models.CharField(
         max_length=2,

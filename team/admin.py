@@ -1,11 +1,8 @@
 from django.contrib import admin
-
-# Register your models here.
-from django.contrib import admin
-# The "dot" before "models" tells Django to look for models.py in the same directory as this file.
 from .models import Player, Team
 
 
+# Register your models here.
 @admin.register(Team)
 class TeamAdmin(admin.ModelAdmin):
     list_display = ('team_name', 'team_size', 'team_formation', 'half_duration')

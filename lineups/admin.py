@@ -1,6 +1,9 @@
 from django.contrib import admin
-
-# Register your models here.
 from .models import Lineup
 
-admin.site.register(Lineup)
+
+# Register your models here.
+@admin.register(Lineup)
+class LineupAdmin(admin.ModelAdmin):
+    list_display = ('game_id', 'opponent', 'game_date', 'team_name', 'team_size', 'team_formation', 'half_duration',
+                    'owner')

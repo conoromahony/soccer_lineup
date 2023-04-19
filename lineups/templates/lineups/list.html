@@ -1,0 +1,26 @@
+{% extends "home/base.html" %}
+
+{% block title %}Previous Lineups{% endblock %}
+
+{% block content %}
+    <table class="roster-list text-nowrap">
+        <thead>
+            <tr>
+                <th id="leftmost-cell">Opponent</th>
+                <th>Date</th>
+                <th>Players</th>
+                <th id="rightmost-cell">Formation</th
+            </tr>
+        </thead>
+        <tbody>
+            {% for lineup in lineups %}
+                <tr>
+                    <td id="leftmost-cell">{{ lineup.opponent }}</td>
+                    <td>{{ lineup.game_date }}</td>
+                    <td>{{ lineup.team_size }}</td>
+                    <td>{{ lineup.team_formation }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
