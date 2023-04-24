@@ -23,16 +23,6 @@ def get_lineup(players_present):
     return lineup
 
 
-def load_goalies(request):
-    team = Team.objects.get(owner=request.user)
-    players = Player.objects.filter(team_name=team.team_name)
-    goalie_choices = list(players.values('name'))
-    possible_goalies = {
-        "goalies": goalie_choices
-    }
-    return JsonResponse(possible_goalies)
-
-
 # Create your views here.
 @login_required
 def lineup_list(request):
@@ -60,8 +50,14 @@ def new_lineup(request):
     lineups = []
     my_team_name = team.team_name
     if request.method == 'POST':
-        form = NewLineupForm(request.POST)
+        logging.info('11111111111')
+        possible_goalies = []
+        goalies = Player.objects.filter(team_name=team.team_name).filter(is_goalie=True)
+        for player in goalies:
+            possible_goalies = possible_goalies + [(player.name, player.name)]
+        form = NewLineupForm(request.POST, choices=possible_goalies)
         if form.is_valid():
+            logging.info('22222222222')
             lineup_id = form.cleaned_data['opponent'] + str(form.cleaned_data['game_date'])
             if not Lineup.objects.filter(game_id=lineup_id).exists():
                 instance = form.save(commit=False)

@@ -1,0 +1,10 @@
+def load_goalies(request):
+    team = Team.objects.get(owner=request.user)
+    players = Player.objects.filter(team_name=team.team_name)
+    goalie_choices = list(players.values('name'))
+    possible_goalies = {
+        "goalies": goalie_choices
+    }
+    return JsonResponse(possible_goalies)
+
+

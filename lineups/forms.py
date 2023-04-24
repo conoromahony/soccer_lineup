@@ -12,7 +12,12 @@ class NewLineupForm(forms.ModelForm):
         model = Lineup
         fields = ('opponent', 'game_date', 'team_formation', 'first_goalie', 'second_goalie')
         widgets = {
-            'game_date': DateInput(),
+            'opponent': forms.TextInput(
+                attrs={'class': 'form-control'}
+            ),
+            'game_date': DateInput(
+                attrs={'class': 'form-control'}
+            ),
             'team_formation': forms.Select(
                 choices=Team.TeamFormation,
                 attrs={'class': 'form-select', 'style': 'max-width: 300px;'}

@@ -3,25 +3,42 @@
 {% block title %}Soccer Lineup Generator Home Page{% endblock %}
 {% block content %}
         <h3 class="pb-4">Soccer Lineup Generator</h3>
-        <p>As a soccer coach, do you struggle to ensure everyone gets <b>equal playing time</b>?
-            <br>If so, this website generates a plan where each outfield player gets the same playing time.</p>
+        <p>As a soccer coach, do you struggle to ensure players get <emphasis>equal playing time</emphasis>?
+            <br />If so, this website can help you.</p>
 
-        <table>
-            <tr>
-                <td>
-                    <a href="/lineups/new_lineup.html"><img src="{% static 'images/lineup.png' %}" class="shadow-lg roundedmy-3"></a>
-                </td>
-                <td>
-                    <a href="/team/player/list.html"><img src="{% static 'images/team.png' %}" class="shadow-lg rounded mx-5 my-3"></a>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a href="/lineups/new_lineup.html" class="nav-link text-center text-success h4">Generate Lineup</a>
-                </td>
-                <td>
-                    <a href="/team/player/list.html" class="nav-link text-center text-success h4">Team Settings</a>
-                </td>
-            </tr>
-        </table>
+        <div class="container">
+            <table>
+                <tr>
+                    <td>
+                        <a href="/lineups/new_lineup.html"><img src="{% static 'images/lineup.png' %}" class="shadow-lg rounded my-3"></a>
+                    </td>
+                    <td>
+                        <a href="/lineups/list.html"><img src="{% static 'images/previous.png' %}" class="shadow-lg rounded mx-5 my-3"></a>
+                    </td>
+                    <td>
+                        <a href="/team/player/list.html"><img src="{% static 'images/team.png' %}" class="shadow-lg rounded my-3 pr-5"></a>
+                    </td>
+                    <td style="font-family:Chalkduster,'Bradley Hand','Comic Sans MS',cursive; font-size: 1.2em; padding-left:40px;">
+                        <div style="display: flex; align-items: center;">
+                            <span>
+                                <p>1. The first time you use this website, set up your team.</p>
+                                <p>2. When you have games, come back and generate the lineups.</p>
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <a href="/lineups/new_lineup.html" class="nav-link text-center text-success h4">Generate Lineup</a>
+                    </td>
+                    <td>
+                        <a href="/lineups/list.html" class="nav-link text-center text-success h4">Previous Lineups</a>
+                    </td>
+                    <td>
+                        <a href="/team/player/list.html" class="nav-link text-center text-success h4">Team Setup</a>
+                    </td>
+                    <td> </td>
+                </tr>
+            </table>
+        </div>
 {% endblock %}

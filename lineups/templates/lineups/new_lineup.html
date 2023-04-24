@@ -13,20 +13,40 @@
     <form action="" method="post">
         {% csrf_token %}
         <div class="row">
-            {% for field in form %}
-                {{ field.errors }}
-                <div class="col-md-4" class="form-select">{{ field.label_tag }} <br />{{ field }}</div>
-            {% endfor %}
+            <div class="col-sm">
+                {{ form.opponent.label_tag }} <br />{{ form.opponent }}
+            </div>
+            <div class="col-sm">
+                {{ form.game_date.label_tag }} <br />{{ form.game_date }}
+            </div>
+            <div class="col-sm">
+                {{ form.team_formation.label_tag }} <br />{{ form.team_formation }}
+            </div>
         </div>
 
         <p class="pt-5">Players present:</p>
-        {% for player in players %}
-            <div>
-                <input type="checkbox" id="{{ player.name }}" name="{{ player.name }}" value="{{ player.name }}">
-                <label for="{{ player.name }}">{{ player.name }}</label>
-            </div>
-        {% endfor %}
+        <div class="row">
+            {% for player in players %}
+                <div class="col-3">
+                    <input type="checkbox" id="{{ player.name }}" name="{{ player.name }}" value="{{ player.name }}">
+                    <label for="{{ player.name }}">{{ player.name }}</label>
+                </div>
+            {% endfor %}
+        </div>
 
-        <input class="lineup_button" type="submit" value="Generate Lineup">
+        <div class="row pt-5">
+            <div class="col-sm">
+                {{ form.first_goalie.label_tag }} <br />{{ form.first_goalie }}
+            </div>
+            <div class="col-sm">
+                {{ form.second_goalie.label_tag }} <br />{{ form.second_goalie }}
+            </div>
+            <div class="col-sm">
+            </div>
+        </div>
+
+        <div class="pt-5">
+            <input class="lineup_button" type="submit" value="Generate Lineup">
+        </div>
     </form>
 {% endblock %}
