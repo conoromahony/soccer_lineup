@@ -16,10 +16,14 @@ MAX_SUB_CYCLES = 7
 NUM_GOALIES = 2
 
 
-def get_lineup(players_present):
+def get_lineup(slots_to_fill, players_present, first_goalie, second_goalie):
     lineup = []
+    if slots_to_fill == 0:
+        logging.info(lineup)
+        
     for player in players_present:
         lineup.append(player)
+    logging.info(lineup)
     return lineup
 
 
@@ -49,16 +53,17 @@ def new_lineup(request):
     players_present = []
     lineups = []
     my_team_name = team.team_name
+
     if request.method == 'POST':
-        logging.info('11111111111')
         possible_goalies = []
         goalies = Player.objects.filter(team_name=team.team_name).filter(is_goalie=True)
         for player in goalies:
             possible_goalies = possible_goalies + [(player.name, player.name)]
         form = NewLineupForm(request.POST, choices=possible_goalies)
+
         if form.is_valid():
-            logging.info('22222222222')
             lineup_id = form.cleaned_data['opponent'] + str(form.cleaned_data['game_date'])
+
             if not Lineup.objects.filter(game_id=lineup_id).exists():
                 instance = form.save(commit=False)
                 instance.game_id = lineup_id
@@ -69,20 +74,23 @@ def new_lineup(request):
                         players_present.append([player.name, player.is_goalie, player.is_left_full,
                                                 player.is_right_full, player.is_center_back, player.is_sweeper,
                                                 player.is_stopper, player.is_left_mid, player.is_right_mid,
-                                                player.is_attacking_mid, player.is_left_striker, player.is_right_striker])
-                        logging.info(player.name)
+                                                player.is_attacking_mid, player.is_left_striker,
+                                                player.is_right_striker])
                 num_minutes = 2 * int(team.half_duration)
                 num_players = len(players_present)
                 on_sideline = num_players - int(team.team_size)
                 num_outfield = int(team.team_size) - 1
                 subs_determined = False
+
                 if on_sideline <= 0:
                     slots_to_fill = 0
-                    lineups.append(get_lineup(players_present))
+                    lineups.append(get_lineup(slots_to_fill, players_present, instance.first_goalie, instance.second_goalie))
                     subs_determined = True
+
                 elif on_sideline == 1:
                     slots_to_fill = num_outfield
                     subs_determined = True
+
                 else:
                     slots_to_fill = MAX_SUB_CYCLES
                     for sub_cycles in range(MIN_SUB_CYCLES, MAX_SUB_CYCLES):
@@ -106,6 +114,7 @@ def new_lineup(request):
         view_lineup_url = lineup_id + '/view_lineup.html'
         lineup = get_object_or_404(Lineup, game_id=lineup_id)
         return redirect(view_lineup_url, {'lineup': lineup})
+
     else:
         possible_goalies = []
         goalies = Player.objects.filter(team_name=team.team_name).filter(is_goalie=True)
@@ -113,4 +122,5 @@ def new_lineup(request):
             possible_goalies = possible_goalies + [(player.name, player.name)]
         logging.info(possible_goalies)
         form = NewLineupForm(choices=possible_goalies)
+
     return render(request, 'lineups/new_lineup.html', {'form': form, 'team': team, 'players': players})

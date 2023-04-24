@@ -6,8 +6,25 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 class Player(models.Model):
+    class PreferredPosition(models.TextChoices):
+        GOALIE = "Goalie", _("Goalie")
+        LEFT_BACK = "Left_Back", _("Left Back")
+        LEFT_CB = "Left_CB", _("Left Center Back")
+        RIGHT_CB = "Right_CB", _("Right Center Back")
+        RIGHT_BACK = "Right_Back", _("Right Back")
+        LEFT_MID = "Left_Mid", _("Left Mid")
+        DEFENSIVE_MID = "Defensive_Mid", _("Defensive Mid")
+        ATTACKING_MID = "Attaching_Mid", _("Attacking Mid")
+        RIGHT_MID = "Right_Mid", _("Right Mid")
+        LEFT_STRIKER = "Left_Striker", _("Left Striker")
+        RIGHT_STRIKER = "Right_Striker", _("Right Striker")
+
     name = models.CharField(max_length=20)
     team_name = models.CharField(max_length=20)
+    preferred_position = models.CharField(
+        max_length=13,
+        choices=PreferredPosition.choices
+    )
     is_goalie = models.BooleanField()
     is_left_full = models.BooleanField()
     is_right_full = models.BooleanField()
