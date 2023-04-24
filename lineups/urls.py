@@ -14,5 +14,5 @@ app_name = 'lineups'
 urlpatterns = [
     path('list.html', views.lineup_list, name='lineup_list'),
     path('<str:name>/view_lineup.html', views.view_lineup, name='view_lineup'),
-    path('new_lineup.html', views.new_lineup, name='new_lineup')
+    path('new_lineup.html', views.new_lineup, name='new_lineup'),
 ]

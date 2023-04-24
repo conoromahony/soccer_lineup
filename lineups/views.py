@@ -1,12 +1,36 @@
-from django.shortcuts import render, get_object_or_404
+import logging
+
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import Http404
+from django.http import Http404, JsonResponse
 
 from .models import Lineup
-from team.models import Team
+from team.models import Team, Player
 from .forms import NewLineupForm
+
+
+MIN_SUB_CYCLES = 4
+MAX_SUB_CYCLES = 7
+NUM_GOALIES = 2
+
+
+def get_lineup(players_present):
+    lineup = []
+    for player in players_present:
+        lineup.append(player)
+    return lineup
+
+
+def load_goalies(request):
+    team = Team.objects.get(owner=request.user)
+    players = Player.objects.filter(team_name=team.team_name)
+    goalie_choices = list(players.values('name'))
+    possible_goalies = {
+        "goalies": goalie_choices
+    }
+    return JsonResponse(possible_goalies)
 
 
 # Create your views here.
@@ -18,35 +42,23 @@ def lineup_list(request):
 
 @login_required
 @csrf_protect
-def view_lineup(request, lineup_id):
-    lineup = get_object_or_404(Lineup, lineup_id=lineup_id)
-    lineups = Lineup.objects.get(owner=request.user)
+def view_lineup(request, name):
+    lineup = get_object_or_404(Lineup, game_id=name)
+    lineups = Lineup.objects.filter(owner=request.user)
     # If the lineup is not in the lineups that are available to you???
-    if player.team_name != my_team_name:
+    if lineup not in lineups:
         raise Http404
-    if request.method == 'POST':
-        if 'update_submit' in request.POST:
-            form = ChoosePositionsForm(request.POST, instance=player)
-            if form.is_valid():
-                form.save()
-        elif 'update_delete' in request.POST:
-            player.delete()
-        players = Player.objects.filter(team_name=my_team_name)
-        return render(request, 'team/player/list.html', {'players': players})
-    else:
-        form = ChoosePositionsForm(instance=player)
-    return render(request, 'team/player/update.html', {'form': form, 'player': player})
+    return render(request, 'lineups/view_lineup.html', {'lineup': lineup})
 
 
 @login_required
 @csrf_protect
 def new_lineup(request):
     team = Team.objects.get(owner=request.user)
+    players = Player.objects.filter(team_name=team.team_name)
+    players_present = []
+    lineups = []
     my_team_name = team.team_name
-    number_of_minutes = 2 * team.half_duration
-    number_players = 15
-    number_subs = number_players - int(team.team_size)
-    number_outfield = int(team.team_size) - 1
     if request.method == 'POST':
         form = NewLineupForm(request.POST)
         if form.is_valid():
@@ -54,12 +66,55 @@ def new_lineup(request):
             if not Lineup.objects.filter(game_id=lineup_id).exists():
                 instance = form.save(commit=False)
                 instance.game_id = lineup_id
+                instance.team_name = my_team_name
                 instance.owner = request.user
+                for player in players:
+                    if request.POST.get(player.name):
+                        players_present.append([player.name, player.is_goalie, player.is_left_full,
+                                                player.is_right_full, player.is_center_back, player.is_sweeper,
+                                                player.is_stopper, player.is_left_mid, player.is_right_mid,
+                                                player.is_attacking_mid, player.is_left_striker, player.is_right_striker])
+                        logging.info(player.name)
+                num_minutes = 2 * int(team.half_duration)
+                num_players = len(players_present)
+                on_sideline = num_players - int(team.team_size)
+                num_outfield = int(team.team_size) - 1
+                subs_determined = False
+                if on_sideline <= 0:
+                    slots_to_fill = 0
+                    lineups.append(get_lineup(players_present))
+                    subs_determined = True
+                elif on_sideline == 1:
+                    slots_to_fill = num_outfield
+                    subs_determined = True
+                else:
+                    slots_to_fill = MAX_SUB_CYCLES
+                    for sub_cycles in range(MIN_SUB_CYCLES, MAX_SUB_CYCLES):
+                        cycle_slots = sub_cycles * num_outfield
+                        if num_outfield == (on_sideline * sub_cycles):
+                            slots_to_fill = sub_cycles
+                            subs_determined = True
+                            break
+                        elif cycle_slots % (on_sideline * sub_cycles):
+                            slots_to_fill = sub_cycles
+                            break
+
+                logging.info("Mins:%s Players:%s Outfield:%s Subs:%s Sub_cycles:%s", num_minutes, num_players, num_outfield, on_sideline, slots_to_fill)
+                instance.number_subs = slots_to_fill
                 instance.save()
+
             else:
                 messages.error(request, 'Lineup already exists.')
                 return render(request, 'lineups/list.html')
-        return render(request, 'lineups/list.html')
+
+        view_lineup_url = lineup_id + '/view_lineup.html'
+        lineup = get_object_or_404(Lineup, game_id=lineup_id)
+        return redirect(view_lineup_url, {'lineup': lineup})
     else:
-        form = NewLineupForm()
-    return render(request, 'lineups/new_lineup.html', {'form': form, 'team': team})
+        possible_goalies = []
+        goalies = Player.objects.filter(team_name=team.team_name).filter(is_goalie=True)
+        for player in goalies:
+            possible_goalies = possible_goalies + [(player.name, player.name)]
+        logging.info(possible_goalies)
+        form = NewLineupForm(choices=possible_goalies)
+    return render(request, 'lineups/new_lineup.html', {'form': form, 'team': team, 'players': players})

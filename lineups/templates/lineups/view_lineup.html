@@ -1,0 +1,14 @@
+{% extends "home/base.html" %}
+{% load mathfilters %}
+
+{% block title %}View a Lineup{% endblock %}
+
+{% block content %}
+    <p><strong>{{ lineup.team_name }}</strong> against <strong>{{ lineup.opponent }}</strong> on <strong>{{ lineup.game_date }}</strong></p>
+    {% with ''|center:lineup.number_subs as range %}
+        {% for _ in range %}
+            <p>Minute {{ lineup.half_duration|div:lineup.number_subs|mul:forloop.counter|floatformat:0 }}</p>
+
+        {% endfor %}
+    {% endwith %}
+{% endblock %}

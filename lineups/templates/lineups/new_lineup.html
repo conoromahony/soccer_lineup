@@ -3,19 +3,30 @@
 {% block title %}Generate a Lineup{% endblock %}
 
 {% block content %}
-  {% if messages %}
-    <ul class="messages">
-      {% for message in messages %}
-        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-      {% endfor %}
-    </ul>
-  {% endif %}
-  <form action="" method="post">
-      {% csrf_token %}
-      {{ team.team_name }}
-      {{ team.half_duration }}
-      {{ team.team_size }}
-      {{ form.as_p }}
-      <input class="lineup_button" type="submit" value="Generate Lineup">
-  </form>
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <form action="" method="post">
+        {% csrf_token %}
+        <div class="row">
+            {% for field in form %}
+                {{ field.errors }}
+                <div class="col-md-4" class="form-select">{{ field.label_tag }} <br />{{ field }}</div>
+            {% endfor %}
+        </div>
+
+        <p class="pt-5">Players present:</p>
+        {% for player in players %}
+            <div>
+                <input type="checkbox" id="{{ player.name }}" name="{{ player.name }}" value="{{ player.name }}">
+                <label for="{{ player.name }}">{{ player.name }}</label>
+            </div>
+        {% endfor %}
+
+        <input class="lineup_button" type="submit" value="Generate Lineup">
+    </form>
 {% endblock %}

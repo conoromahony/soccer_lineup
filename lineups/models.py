@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
+from team.models import Player
 
 
 # Create your models here.
@@ -21,8 +22,14 @@ class Lineup(models.Model):
         # FORTY = "40", _("40 minutes")
         # FORTY_FIVE = "45", _("45 minutes")
 
+    class FirstGoalie(models.Model):
+        name = models.ForeignKey(Player, on_delete=models.CASCADE)
+
+    class SecondGoalie(models.Model):
+        name = models.ForeignKey(Player, on_delete=models.CASCADE)
+
     game_id = models.CharField(max_length=20)
-    opponent = models.CharField(max_length=20, default='')
+    opponent = models.CharField(max_length=40, default='')
     game_date = models.DateField()
     team_name = models.CharField(max_length=20)
     team_size = models.CharField(
@@ -40,6 +47,15 @@ class Lineup(models.Model):
         choices=HalfDuration.choices,
         default=HalfDuration.THIRTY_FIVE,
     )
+    first_goalie = models.CharField(
+        max_length=20,
+        default=''
+    )
+    second_goalie = models.CharField(
+        max_length=20,
+        default=''
+    )
+    number_subs = models.IntegerField()
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
