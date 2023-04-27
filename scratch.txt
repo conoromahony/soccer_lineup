@@ -8,3 +8,12 @@ def load_goalies(request):
     return JsonResponse(possible_goalies)
 
 
+
+    {% with ''|center:lineup.number_subs as range %}
+        {% for _ in range %}
+            <p>Minute {{ lineup.half_duration|div:lineup.number_subs|mul:forloop.counter|floatformat:0 }}</p>
+
+        {% endfor %}
+    {% endwith %}
+
+

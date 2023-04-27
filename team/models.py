@@ -7,17 +7,17 @@ from django.contrib.auth.models import User
 # Create your models here.
 class Player(models.Model):
     class PreferredPosition(models.TextChoices):
-        GOALIE = "Goalie", _("Goalie")
-        LEFT_BACK = "Left_Back", _("Left Back")
-        LEFT_CB = "Left_CB", _("Left Center Back")
-        RIGHT_CB = "Right_CB", _("Right Center Back")
-        RIGHT_BACK = "Right_Back", _("Right Back")
-        LEFT_MID = "Left_Mid", _("Left Mid")
-        DEFENSIVE_MID = "Defensive_Mid", _("Defensive Mid")
-        ATTACKING_MID = "Attaching_Mid", _("Attacking Mid")
-        RIGHT_MID = "Right_Mid", _("Right Mid")
-        LEFT_STRIKER = "Left_Striker", _("Left Striker")
-        RIGHT_STRIKER = "Right_Striker", _("Right Striker")
+        GOALIE = "goalie", _("Goalie")
+        LEFT_BACK = "left_full", _("Left Back")
+        LEFT_CB = "center_back", _("Left Center Back")
+        RIGHT_CB = "sweeper", _("Right Center Back")
+        RIGHT_BACK = "right_full", _("Right Back")
+        LEFT_MID = "left_mid", _("Left Mid")
+        DEFENSIVE_MID = "stopper", _("Defensive Mid")
+        ATTACKING_MID = "attaching_mid", _("Attacking Mid")
+        RIGHT_MID = "right_mid", _("Right Mid")
+        LEFT_STRIKER = "left_striker", _("Left Striker")
+        RIGHT_STRIKER = "right_striker", _("Right Striker")
 
     name = models.CharField(max_length=20)
     team_name = models.CharField(max_length=20)

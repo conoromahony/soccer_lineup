@@ -56,6 +56,7 @@ class Lineup(models.Model):
         default=''
     )
     number_subs = models.IntegerField()
+    positions = models.CharField(max_length=2000)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):

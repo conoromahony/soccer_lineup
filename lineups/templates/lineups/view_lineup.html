@@ -1,14 +1,21 @@
 {% extends "home/base.html" %}
-{% load mathfilters %}
 
 {% block title %}View a Lineup{% endblock %}
 
 {% block content %}
     <p><strong>{{ lineup.team_name }}</strong> against <strong>{{ lineup.opponent }}</strong> on <strong>{{ lineup.game_date }}</strong></p>
-    {% with ''|center:lineup.number_subs as range %}
-        {% for _ in range %}
-            <p>Minute {{ lineup.half_duration|div:lineup.number_subs|mul:forloop.counter|floatformat:0 }}</p>
-
-        {% endfor %}
-    {% endwith %}
+    {% for position in positions %}
+        <p>Minute: {{ position.0 }}</p>
+        <p>Goalie: {{ position.1 }}</p>
+        <p>Left Back: {{ position.2 }}</p>
+        <p>Left Center Back: {{ position.3 }}</p>
+        <p>Right Center Back: {{ position.4 }}</p>
+        <p>Right Back: {{ position.5 }}</p>
+        <p>Left Midfield: {{ position.6 }}</p>
+        <p>Defensive Midfield: {{ position.7 }}</p>
+        <p>Attacking Midfield: {{ position.8 }}</p>
+        <p>Right Midfield: {{ position.9 }}</p>
+        <p>Left Striker: {{ position.10 }}</p>
+        <p>Right Striker: {{ position.11 }}</p>
+    {% endfor %}
 {% endblock %}
