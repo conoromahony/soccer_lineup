@@ -15,30 +15,80 @@ from .forms import NewLineupForm
 
 MIN_SUB_CYCLES = 4
 MAX_SUB_CYCLES = 7
+# A future optimization will be to provide more flexibility with goalie substitutions.
 NUM_GOALIES = 2
+# When we support other team sizes and team formations, this will need to evolve into a "library" of player
+# positions for each combination.
 PLAYER_POSITIONS = ["left_full", "center_back", "sweeper", "right_full", "left_mid", "stopper", "attacking_mid",
                     "right_mid", "left_striker", "right_striker"]
 
-def get_position(request, player, position):
-    logging.info("position:" + position)
-    position_list = Player.objects.filter(preferred_position=position)
-    logging.info(position_list)
-    if len(position_list) == 0:
-        boolean_check = "is_left_full"
-        logging.info("boolean_check: " + boolean_check)
-        new_list = Player.objects.filter(is_left_full=True)
-        logging.info(new_list)
-        choose_player = random.choice(new_list)
-        player = choose_player.name
-    elif len(position_list) == 1:
-        player = left_back_list[0].name
+
+def get_plays_there(request, players_present, positions, position_to_fill, players):
+    # This is not a "view" function. It is a supporting helper function. Call this function when you want to find a
+    # player who plays in a particular position of the field (but it is not their preferred position). If there are
+    # no players left who play in the position, this function chooses the first available remaining player (even if
+    # they don't play in the position.
+    boolean_check = "is_" + position_to_fill
+    logging.info("boolean_check: " + boolean_check)
+    plays_there = [player for player in players if getattr(player, boolean_check)]
+
+    plays_there_and_present = []
+    for each_player in plays_there:
+        valid_player = False
+        for each_present in players_present:
+            if each_player.name in each_present:
+                valid_player = True
+        if each_player.name in positions:
+            valid_player = False
+        if valid_player:
+            plays_there_and_present.append(each_player)
+
+    logging.info(plays_there_and_present)
+    if len(plays_there_and_present) == 0:
+        for each_present in players_present:
+            if each_present[0] not in positions:
+                return each_present[0]
+                break
+    elif len(plays_there_and_present) == 1:
+        return plays_there_and_present[0].name
     else:
-        choose_player = random.choice(position_list)
-        player = choose_player.name
-    return player
+        return random.choice(plays_there_and_present).name
 
 
-def get_lineup(request, slots_to_fill, players_present, first_goalie, second_goalie):
+def get_player(request, players_present, positions, position_to_fill, players):
+    # This is not a "view" function. It is a supporting helper function. Call this function to return the players for
+    # whom the requested position is their preferred position. If there are no players for whom the requested position
+    # is their preferred position, call a function to get a player who plays in that position.
+    preferred_players = []
+    for player in players_present:
+        player_object = Player.objects.get(name=player[0])
+        if (player_object.preferred_position == position_to_fill) and (player_object.name not in positions):
+            preferred_players.append(player_object.name)
+    logging.info(preferred_players)
+
+    if len(preferred_players) == 0:
+        get_someone = get_plays_there(request, players_present, positions, position_to_fill, players)
+        return get_someone
+    elif len(preferred_players) == 1:
+        logging.info('1111111111')
+        return preferred_players[0]
+    else:
+        return random.choice(preferred_players)
+
+
+def get_team(request, players_present, players, positions):
+    # This is not a "view" function. It is a supporting function. Call this function to get a single lineup (for a
+    # portion of a game). This function iterates through each outfield position, and calls other functions to assign
+    # a player for that position.
+    for position_to_fill in PLAYER_POSITIONS:
+        logging.info(position_to_fill)
+        positions.append(get_player(request, players_present, positions, position_to_fill, players))
+    return positions
+
+
+def get_lineups(request, slots_to_fill, players_present, first_goalie, second_goalie):
+    # This is not a "view" function. It is a supporting function. Call this function to get all lineups for a game.
+    # At each substitution point in the game, this function calls the get_team function to get the team for that time.
     logging.info(players_present)
     team = Team.objects.get(owner=request.user)
     players = Player.objects.filter(team_name=team.team_name)
@@ -48,57 +98,13 @@ def get_lineup(request, slots_to_fill, players_present, first_goalie, second_goa
         positions = [minute]
         goalie = first_goalie
         positions.append(goalie)
-        for position_to_fill in PLAYER_POSITIONS:
-            logging.info(position_to_fill)
-            preferred_players = []
-            for player in players_present:
-                player_object = Player.objects.get(name=player[0])
-                if player_object.preferred_position == position_to_fill:
-                    if player_object.name not in positions:
-                        preferred_players.append(player_object.name)
-            logging.info(preferred_players)
-
-            if len(preferred_players) == 0:
-                boolean_check = "is_" + position_to_fill
-                logging.info("boolean_check: " + boolean_check)
-                plays_there = [player for player in players if getattr(player, boolean_check)]
-                logging.info(plays_there)
-                for player in plays_there:
-                    valid_player = False
-                    for each_present in players_present:
-                        if player.name in each_present:
-                            valid_player = True
-                    if player.name in positions:
-                        valid_player = False
-                    if not valid_player:
-                        plays_there.remove(player)
-                logging.info(plays_there)
-                if len(plays_there) == 0:
-                    positions.append("OOPS")
-                elif len(plays_there) == 1:
-                    positions.append(plays_there[0].name)
-                else:
-                    choose_player = random.choice(plays_there)
-                    positions.append(choose_player.name)
-
-            elif len(preferred_players) == 1:
-                positions.append(preferred_players[0])
-                logging.info('1111111111')
-            else:
-                choose_player = random.choice(preferred_players)
-                positions.append(choose_player)
-        lineup.append(positions)
+        lineup.append(get_team(request, players_present, players, positions))
 
         minute = team.half_duration
         positions = [minute]
         goalie = second_goalie
         positions.append(goalie)
-        for player in players_present:
-            player_name = player[0]
-            player_object = Player.objects.get(name=player_name)
-            if player_object.name != goalie:
-                positions.append(player_name)
-        lineup.append(positions)
+        lineup.append(get_team(request, players_present, players, positions))
 
     logging.info(lineup)
     return lineup
@@ -162,7 +168,7 @@ def new_lineup(request):
 
                 if on_sideline <= 0:
                     slots_to_fill = 0
-                    lineups = get_lineup(request, slots_to_fill, players_present, instance.first_goalie, instance.second_goalie)
+                    lineups = get_lineups(request, slots_to_fill, players_present, instance.first_goalie, instance.second_goalie)
                     subs_determined = True
 
                 elif on_sideline == 1:
