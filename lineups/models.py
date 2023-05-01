@@ -58,7 +58,7 @@ class Lineup(models.Model):
         max_length=20,
         default=''
     )
-    number_subs = models.IntegerField()
+    num_players = models.IntegerField()
     positions = models.CharField(max_length=2000)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
 

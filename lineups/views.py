@@ -81,7 +81,6 @@ def get_player(request, players_present, positions, position_to_fill, players, p
         get_someone = get_plays_there(request, players_present, positions, position_to_fill, players, playing_time)
         return get_someone
     elif len(preferred_players) == 1:
-        logging.info('1111111111')
         return preferred_players[0]
     else:
         return random.choice(preferred_players)
@@ -258,6 +257,7 @@ def new_lineup(request):
                                                 player.is_right_striker])
                 num_minutes = 2 * int(team.half_duration)
                 num_players = len(players_present)
+                instance.num_players = num_players
                 on_sideline = num_players - int(team.team_size)
                 num_outfield = int(team.team_size) - 1
                 subs_determined = False

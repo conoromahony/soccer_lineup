@@ -8,17 +8,19 @@
             <tr>
                 <th id="leftmost-cell">Opponent</th>
                 <th>Date</th>
-                <th>Players</th>
-                <th id="rightmost-cell">Formation</th
+                <th>Team Size</th>
+                <th>Team Formation</th>
+                <th id="rightmost-cell">Players Present</th>
             </tr>
         </thead>
         <tbody>
             {% for lineup in lineups %}
                 <tr>
-                    <td id="leftmost-cell">{{ lineup.opponent }}</td>
+                    <td id="leftmost-cell"><a href="/lineups/{{ lineup.game_id }}/view_lineup.html">{{ lineup.opponent }}</a></td>
                     <td>{{ lineup.game_date }}</td>
                     <td>{{ lineup.team_size }}</td>
                     <td>{{ lineup.team_formation }}</td>
+                    <td>{{ lineup.num_players }}</td>
                 </tr>
             {% endfor %}
         </tbody>
