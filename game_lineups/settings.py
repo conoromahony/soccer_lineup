@@ -8,8 +8,9 @@ import logging
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# TODO: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-36y!r4+3xibnwtl+++kz(47_rma7%_mr+9lhuzq@_)3om**-8#'
+# TODO: make sure to keep the secret key used in production secret!
+from decouple import config
+SECRET_KEY = config("SECRET_KEY")
 
 # TODO: don't run with debug turned on in production!
 DEBUG = True
