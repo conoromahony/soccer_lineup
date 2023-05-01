@@ -7,16 +7,19 @@ from team.models import Player
 # Create your models here.
 class Lineup(models.Model):
     class TeamSize(models.TextChoices):
+        # TODO: Expand to more than just 11 players.
         # SEVEN = "7", _("7 vs. 7")
         # NINE = "9", _("9 vs. 9")
         ELEVEN = "11", _("11 vs. 11")
 
     class TeamFormation(models.TextChoices):
+        # TODO: Expand to more team formations.
         FOUR_FOUR_TWO_D = "442d", _("4-4-2 (diamond)")
         # FOUR_FOUR_TWO_F = "442f", _("4-4-2 (flat)")
         # FOUR_THREE_THREE = "433", _("4-3-3")
 
     class HalfDuration(models.TextChoices):
+        # TODO: Expand to more game length settings.
         # THIRTY = "30", _("30 minutes")
         THIRTY_FIVE = "35", _("35 minutes")
         # FORTY = "40", _("40 minutes")

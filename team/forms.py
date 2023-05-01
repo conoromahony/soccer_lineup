@@ -1,5 +1,3 @@
-"""Choose player positions
-"""
 from django import forms
 from .models import Player, Team
 

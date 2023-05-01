@@ -1,6 +1,6 @@
 from django import forms
 from .models import Lineup
-from team.models import Team, Player
+from team.models import Team
 
 
 class DateInput(forms.DateInput):

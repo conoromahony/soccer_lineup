@@ -9,7 +9,6 @@ from .forms import ChoosePositionsForm, NewPlayerForm, NewTeamForm
 
 
 # Create your views here.
-
 @login_required
 @csrf_protect
 def player_list(request):

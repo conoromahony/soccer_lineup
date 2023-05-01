@@ -1,9 +1,9 @@
-from django import forms
 from django.forms import ModelForm, EmailInput, Textarea
-
 from .models import Feedback
 
 
+# This is a form on the About page of the website. People who use the website can use this form to provide input and
+# feedback.
 class NewFeedbackForm(ModelForm):
     class Meta:
         model = Feedback
