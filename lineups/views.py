@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponseRedirect
+from math import floor
 
 from .models import Lineup
 from team.models import Team, Player
@@ -38,7 +39,6 @@ def get_plays_there(request, players_present, positions, position_to_fill, playe
     boolean_check = "is_" + position_to_fill
     # Remember that the column in the Player database table that tracks if someone plays the position is named "is_"
     # followed by the position name.
-    logging.info("boolean_check: " + boolean_check)
     plays_there = [player for player in players if getattr(player, boolean_check)]
 
     plays_there_and_present = []
@@ -47,43 +47,63 @@ def get_plays_there(request, players_present, positions, position_to_fill, playe
         for each_present in players_present:
             if each_player.name in each_present:
                 valid_player = True
+
         # Check to make sure the player is not already assigned to a position in the current lineup.
         if each_player.name in positions:
             valid_player = False
+
+        # Check to make sure the player has not exceeded their number of playing slots.
+        for player_time_check in playing_time:
+            if player_time_check["name"] == each_player.name:
+                if player_time_check["playing_slots"] >= player_time_check["total_playing_slots"]:
+                    valid_player = False
+
         if valid_player:
             plays_there_and_present.append(each_player)
-    logging.info(plays_there_and_present)
 
-    # If there are no players who are present, and are not already assigned to a position, then go get another player.
     if len(plays_there_and_present) == 0:
-        for each_present in players_present:
-            if each_present[0] not in positions:
-                return each_present[0]
+        # If there are no players who play in that position and are present, then go get another player.
+        # TODO: This is quite a crude algorithm, which essentially takes the first player who hasn't used up all of
+        #  their playing slots. This can be improved.
+        for each_present in playing_time:
+            if (each_present["name"] not in positions) and \
+                    (each_present["playing_slots"] < each_present["total_playing_slots"]):
+                logging.info("5555 position: %s, player: %s", position_to_fill, each_present["name"])
+                return each_present["name"]
                 break
     elif len(plays_there_and_present) == 1:
+        logging.info("6666 position: %s, player: %s", position_to_fill, plays_there_and_present[0].name)
         return plays_there_and_present[0].name
     else:
-        return random.choice(plays_there_and_present).name
+        player_chosen = random.choice(plays_there_and_present).name
+        logging.info("7777 position: %s, player: %s", position_to_fill, player_chosen)
+        return player_chosen
 
 
 def get_player(request, players_present, positions, position_to_fill, players, playing_time):
     # This is not a "view" function. It is a supporting helper function. Call this function to return the players for
     # whom the requested position is their preferred position. If there are no players for whom the requested position
     # is their preferred position, call a function to get a player who plays in that position.
+    # TODO: Update the algorithm to minimize the number of positional switches each time there's a substitution.
     preferred_players = []
     for player in players_present:
         player_object = Player.objects.get(name=player[0])
         if (player_object.preferred_position == position_to_fill) and (player_object.name not in positions):
-            preferred_players.append(player_object.name)
-    logging.info(preferred_players)
+            for player_time_check in playing_time:
+                if player_time_check["name"] == player_object.name:
+                    if player_time_check["playing_slots"] < player_time_check["total_playing_slots"]:
+                        preferred_players.append(player_object.name)
 
     if len(preferred_players) == 0:
         get_someone = get_plays_there(request, players_present, positions, position_to_fill, players, playing_time)
         return get_someone
     elif len(preferred_players) == 1:
+        logging.info("0000 position: %s, player: %s", position_to_fill, preferred_players[0])
         return preferred_players[0]
     else:
-        return random.choice(preferred_players)
+        player_chosen = random.choice(preferred_players)
+        logging.info("1111 position: %s, player: %s", position_to_fill, player_chosen)
+        return player_chosen
 
 
 def get_team(request, players_present, players, positions, playing_time):
@@ -91,7 +111,6 @@ def get_team(request, players_present, players, positions, playing_time):
     # portion of a game). This function iterates through each outfield position, and calls other functions to assign
     # a player for that position.
     for position_to_fill in PLAYER_POSITIONS:
-        logging.info(position_to_fill)
         positions.append(get_player(request, players_present, positions, position_to_fill, players, playing_time))
     return positions
 
@@ -99,13 +118,13 @@ def get_team(request, players_present, players, positions, playing_time):
 def get_lineups(request, num_outfield, on_sideline, num_minutes, players_present, first_goalie, second_goalie):
     # This is not a "view" function. It is a supporting function. Call this function to get all lineups for a game.
     # At each substitution point in the game, this function calls the get_team function to get the team for that time.
-    logging.info(players_present)
     team = Team.objects.get(owner=request.user)
     players = Player.objects.filter(team_name=team.team_name)
     lineup = []
 
     # Create a list to keep track of each player's playing time. Each item in the list is a dictionary that keeps
     # track of information for a single player.
+    # TODO: Incorporate more information into playing_time, so we don't have to pass so many arguments to functions.
     playing_time = []
 
     # If we have no subs, we will have one lineup for the first half (with the first half goalie in goal), and
@@ -148,7 +167,6 @@ def get_lineups(request, num_outfield, on_sideline, num_minutes, players_present
                 num_lineups = 8
                 num_sub_slots = int((8 * on_sideline) / total_players)
                 num_playing_slots = num_lineups - num_sub_slots
-    logging.info("Number of lineups: %s, Playing slots: %s, Sub slots: %s", num_lineups, num_playing_slots, num_sub_slots)
 
     # Populate the data structure that keeps track of each player's playing time. Cater for the fact that goalies are
     # treated differently when it comes to substitutions.  Each item in the list is a dictionary that keeps track of
@@ -156,14 +174,17 @@ def get_lineups(request, num_outfield, on_sideline, num_minutes, players_present
     # slots they have currently used up (slots), and the total number of playing slots they should fill in the game
     # (total_slots).
     for player in players_present:
-        individual_player = dict(name=player[0], slots=0, total_slots=num_playing_slots)
-        if player[0] == first_goalie:
-            slots_in_a_half = num_lineups / 2
-            individual_player = dict(name=player[0], slots=0, total_slots=num_playing_slots)
-        if player[0] == second_goalie:
-            individual_player = dict(name=player[0], slots=0, total_slots=num_playing_slots)
+        # TODO: This formula seems to work for the different combination of subs for 11 players (see the spreadsheet I
+        #  created. However, I need to test this more rigorously.
+        goalie_slots = floor((num_lineups / 2) + (num_playing_slots / 2))
+        goalie_sub_slots = num_lineups - goalie_slots
+        if (player[0] == first_goalie) or (player[0] == second_goalie):
+            individual_player = dict(name=player[0], total_playing_slots=goalie_slots, playing_slots=0,
+                                     total_sub_slots=goalie_sub_slots, sub_slots=0)
+        else:
+            individual_player = dict(name=player[0], total_playing_slots=num_playing_slots, playing_slots=0,
+                                     total_sub_slots=num_sub_slots, sub_slots=0)
         playing_time.append(individual_player)
-    logging.info(playing_time)
 
     # If there are no substitutes, generate the lineup for each half.
     if on_sideline == 0:
@@ -181,18 +202,26 @@ def get_lineups(request, num_outfield, on_sideline, num_minutes, players_present
         positions.append(goalie)
         lineup.append(get_team(request, players_present, players, positions, playing_time))
 
-    # If there are no substitutes, generate the lineup for each half.
-    elif on_sideline == 1:
-        num_substitutions = int(num_outfield / on_sideline)
-        for i in range(num_substitutions):
-            minute = int(i * (num_minutes / num_substitutions))
+    # If we have one or more subs...
+    else:
+        for i in range(num_lineups):
+            minute = int(i * (num_minutes / num_lineups))
             positions = [minute]
             if minute < int(num_minutes / 2):
                 goalie = first_goalie
             else:
                 goalie = second_goalie
             positions.append(goalie)
-            lineup.append(get_team(request, players_present, players, positions, playing_time))
+            positions = get_team(request, players_present, players, positions, playing_time)
+            logging.info(positions)
+
+            for each_player in playing_time:
+                if each_player["name"] in positions:
+                    each_player["playing_slots"] += 1
+                else:
+                    each_player["sub_slots"] += 1
+            logging.info(playing_time)
+            lineup.append(positions)
 
     logging.info(lineup)
     return lineup
