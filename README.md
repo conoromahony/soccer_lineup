@@ -50,6 +50,15 @@ The technologies used to create this website are:
   - The Bootstrap HTML and CSS front-end framework.
   - GitHub for version control.
 
+## Project Organization
+This project is organized into five Django applications:
+ - **game_lineups**: The "main" application for the project. It includes configuration settings for the overall
+   project, as well as settings for how to handle all URLs for the project.
+ - **home**: Implements the Home page, the FAQs page, and the About page of the website.
+ - **lineups**: Implements the part of the website for generating and viewing game lineups.
+ - **team**: Implements the part of the website for setting up a team, including the roster of players.
+ - **users**: Implements user accounts for the website, including the creation of accounts and logging in and out.
+
 ## Directories and Files
  - **.env**
    A file for storing environment variable settings.
@@ -82,6 +91,67 @@ The technologies used to create this website are:
    The main Django file for handling URLs for this project. It basically includes references to the urls.py for each 
    "application" in the project.
 
+ - **home**
+   The application that provides the "home" pages for the project.These include the Home page, the FAQs page, and the 
+   About page.
+
+ - **home/admin.py**
+   Registers the models that we want to appear in the Django admin user interface. For the "home" application, only the 
+   About page and it's Feedback form has any information that we want to store.
+
+ - **home/apps.py**
+   Specifies the configuration settings for the "home" application.
+
+ - **home/forms.py**
+   Specifies the forms that appear in web pages in the "home" application. That is, the Feedback form on the About page.
+
+ - **home/models.py**
+   Specifies the data models for the "home" application. That is, for the Feedback form on the About page.
+
+ - **home/urls.py**
+   Indicates how to handle URLs for the "home" application.
+
+ - **home/views.py**
+   Specifies the logic of the "home" application. Each view receives an HTTP request, processes it, and returns a 
+   response (using the templates).
+
+ - **home/templates/**
+   The templates for the HTML pages that are rendered by the "home" application. There are five templates: 
+   - *about.html* which is for the About page
+   - *base.html* which is a base template file for all other files on the website. It includes the meta information as
+     well as the navigation bar for the top of each page on the website.
+   - *faqs.html* which is for the FAQs page
+   - *index.html* which is the Home page for the website
+   - *thanks.html* which is a version of the About page to be displayed after a user provides feedback (via the form).
+
+ - **lineups**
+   The application that allows users to generate lineups, and also allows them to see previously-generated lineups.
+
+ - **lineups/admin.py**
+   Registers the "lineups" application models that we want to appear in the Django admin user interface.
+
+ - **lineups/apps.py**
+   Specifies the configuration settings for the "lineups" application.
+
+ - **lineups/forms.py**
+   Specifies the forms that appear in web pages in the "lineups" application.
+
+ - **lineups/models.py**
+   Specifies the data models for the "lineups" application.
+
+ - **lineups/urls.py**
+   Indicates how to handle URLs for the "lineups" application.
+
+ - **lineups/views.py**
+   Specifies the logic of the "lineups" application. Each view receives an HTTP request, processes it, and returns a 
+   response (using the templates).
+
+ - **lineups/templates/**
+   The templates for the HTML pages that are rendered by the "lineups" application. There are three templates: 
+   - *list.html* which lists all previously-generated lineups
+   - *new_lineup.html* which allows users to generate a set of lineups for a game
+   - *view_lineup.html* which allows a user to view a set of lineups for a game
+
  - **team**
    The application that maintains information about a team, including details about games, information about the 
    players on the roster, and so on.
@@ -93,7 +163,7 @@ The technologies used to create this website are:
    Specifies the configuration settings for the "team" application.
 
  - **team/forms.py**
-   Specifies the forms that appear in web pages in "the" team application.
+   Specifies the forms that appear in web pages in the "team" application.
 
  - **team/models.py**
    Specifies the data models for the "team" application.
@@ -102,8 +172,8 @@ The technologies used to create this website are:
    Indicates how to handle URLs for the "team" application.
 
  - **team/views.py**
-   Specifies the logic of the team application. Each view receives an HTTP request, processes it, and returns a 
-   response.
+   Specifies the logic of the "team" application. Each view receives an HTTP request, processes it, and returns a 
+   response (using the templates).
 
  - **team/static/**
    The folder that stores the "static" items for this project. Static items include images and CSS files.
@@ -114,9 +184,32 @@ The technologies used to create this website are:
    - *list.html* which lists all players on a roster
    - *update.html* which allows a user to edit the information for a player
 
+ - **users**
+   The application that maintains information about the user accounts for this project.
 
+ - **users/admin.py**
+   Registers the "users" models that we want to appear in the Django admin user interface.
 
-## Notes
+ - **users/apps.py**
+   Specifies the configuration settings for the "users" application.
+
+ - **users/models.py**
+   Specifies the data models for the "user" application.
+
+ - **users/urls.py**
+   Indicates how to handle URLs for the "user" application.
+
+ - **users/views.py**
+   Specifies the logic of the "users" application. Each view receives an HTTP request, processes it, and returns a 
+   response (using the templates).
+
+ - **users/templates/**
+   The templates for the HTML pages that are rendered by the "users" application. There are three templates: 
+   - *logged_out.html* which is displayed when someone logs out
+   - *login.html* which allows a registered user to log in
+   - *register.html* which allows a visitor to the website to create a user account
+
+## Notes: Deploying to Production
 To deploy this project in a production environment, I’ll need to run it either:
  - As a WSGI application using a web server like Apache, Gunicorn, or uWSGI.
  - As an ASGI application using a server like Uvicorn or Daphne.
