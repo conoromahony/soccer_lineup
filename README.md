@@ -51,6 +51,12 @@ The technologies used to create this website are:
   - GitHub for version control.
 
 ## Directories and Files
+ - **.env**
+   A file for storing environment variable settings.
+
+ - **.gitignore**
+   A file indicating the files not to push to the GitHub repository (because they contain sensitive information).
+
  - **db.sqlite3**
    The SQLite3 database for the Django project. 
 
@@ -58,7 +64,7 @@ The technologies used to create this website are:
    A command-line utility that helps manage the Django project.
 
  - **README.md**
-   The readme file for this project (in markdown format). It describes the project and how it operates.
+   This readme file (in markdown format). It describes the project and how it operates.
 
  - **requirements.txt**
    Indicates the libraries, modules, and packages required for this project.
@@ -67,25 +73,48 @@ The technologies used to create this website are:
    A directory containing the files for the Python environment for this project.
 
  - **game_lineups**
-   The project directory.
+   The main project directory for this website.
 
  - **game_lineups/settings.py**
-   The configuration settings for the project.
+   The Django configuration settings for the project.
+
+ - **game_lineups/urls.py**
+   The main Django file for handling URLs for this project. It basically includes references to the urls.py for each 
+   "application" in the project.
 
  - **team**
-   The application that maintains information about the team, like the team size, the players on the roster, and so on.
+   The application that maintains information about a team, including details about games, information about the 
+   players on the roster, and so on.
 
  - **team/admin.py**
-   Registers the models for the team application.
+   Registers the "team" application models that we want to appear in the Django admin user interface.
 
  - **team/apps.py**
-   Specifies the configuration settings for the team application.
+   Specifies the configuration settings for the "team" application.
+
+ - **team/forms.py**
+   Specifies the forms that appear in web pages in "the" team application.
 
  - **team/models.py**
-   Specifies the data models for the team application.
+   Specifies the data models for the "team" application.
+
+ - **team/urls.py**
+   Indicates how to handle URLs for the "team" application.
 
  - **team/views.py**
-   Specifies the logic of the team application. Each view receives an HTTP request, processes it, and returns a response.
+   Specifies the logic of the team application. Each view receives an HTTP request, processes it, and returns a 
+   response.
+
+ - **team/static/**
+   The folder that stores the "static" items for this project. Static items include images and CSS files.
+
+ - **team/templates/**
+   The templates for the HTML pages that are rendered by the "team" application. There are three templates: 
+   - *add.html* which allows a user to add a player to the roster
+   - *list.html* which lists all players on a roster
+   - *update.html* which allows a user to edit the information for a player
+
+
 
 ## Notes
 To deploy this project in a production environment, I’ll need to run it either:
