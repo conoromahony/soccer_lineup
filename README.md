@@ -3,23 +3,18 @@
 #### Description:
 This website helps youth soccer coaches ensure all of their players get equal playing time.
 
+##Background
 I created this website after spending too much time each and every week, painstakingly planning my youth soccer team's 
 substitution schedule in an attempt to ensure each player gets equal playing time. After manually figuring out my 
 substitution strategy week-after-week, season-after-season, I created this website to automate what I had been manually 
 doing. 
 
+##Status
 At present, this website is in the development phase, working only on my laptop. It has not yet been deployed to a 
 production server for others to use. I plan to deploy it to a production server after I address the items marked in
 the code comments as TODO items.
 
-The technologies used to create this website are:
-  - Python for server-side processing.
-  - A Python virtual environment to contain the project.
-  - The Django web framework (with HTML and JavaScript) to create the site.
-  - A SQLite3 database.
-  - The Bootstrap HTML and CSS front-end framework.
-  - GitHub for version control.
-
+##Using the Website
 When you first load this website, you are prompted to either create an account or to log in. Once you have created an
 account and logged in, you see the home page:
 ![Soccer Lineup - Home Screen.png](Soccer%20Lineup%20-%20Home%20Screen.png?raw=true)
@@ -46,12 +41,57 @@ When you generate the lineups for a game, this website determines the optimal nu
 indicates the lineup after each of those substitutions. Here is what that page looks like:
 ![Soccer Lineups - Game Lineups.png](Soccer%20Lineups%20-%20Game%20Lineups.png?raw=true)
 
+##Technologies
+The technologies used to create this website are:
+  - Python for server-side processing.
+  - A Python virtual environment to contain the project.
+  - The Django web framework (with HTML and JavaScript) to create the site.
+  - A SQLite3 database.
+  - The Bootstrap HTML and CSS front-end framework.
+  - GitHub for version control.
 
-requirements.txt
-  A text file that lists all the dependencies of the project and their versions.
-  
-env/
-  
-soccer_lineup/
+##Directories and Files
+ - db.sqlite3
+   The SQLite3 database for the Django project. 
 
-Your README.md file should be minimally multiple paragraphs in length, and should explain what your project is, what each of the files you wrote for the project contains and does, and if you debated certain design choices, explaining why you made them.
+ - manage.py
+   A command-line utility that helps manage the Django project.
+
+ - README.md
+   The readme file for this project (in markdown format). It describes the project and how it operates.
+
+ - requirements.txt
+   Indicates the libraries, modules, and packages required for this project.
+
+ - env
+   A directory containing the files for the Python environment for this project.
+
+ - game_lineups
+   The project directory.
+
+ - game_lineups/settings.py
+   The configuration settings for the project.
+
+ - team
+   The application that maintains information about the team, like the team size, the players on the roster, and so on.
+
+ - team/admin.py
+   Registers the models for the team application.
+
+ - team/apps.py
+   Specifies the configuration settings for the team application.
+
+ - team/models.py
+   Specifies the data models for the team application.
+
+ - team/views.py
+   Specifies the logic of the team application. Each view receives an HTTP request, processes it, and returns a response.
+
+##Notes
+To deploy this project in a production environment, I’ll need to run it either:
+ - As a WSGI application using a web server like Apache, Gunicorn, or uWSGI.
+ - As an ASGI application using a server like Uvicorn or Daphne.
+
+Also, I'll need to make sure to:
+ - Change the DEBUG setting to False in settings.py.
+ - Add the domain & host to the ALLOWED_HOSTS setting in settings.py.
