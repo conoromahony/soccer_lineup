@@ -14,7 +14,7 @@ class Player(models.Model):
         RIGHT_BACK = "right_full", _("Right Back")
         LEFT_MID = "left_mid", _("Left Mid")
         DEFENSIVE_MID = "stopper", _("Defensive Mid")
-        ATTACKING_MID = "attaching_mid", _("Attacking Mid")
+        ATTACKING_MID = "attacking_mid", _("Attacking Mid")
         RIGHT_MID = "right_mid", _("Right Mid")
         LEFT_STRIKER = "left_striker", _("Left Striker")
         RIGHT_STRIKER = "right_striker", _("Right Striker")

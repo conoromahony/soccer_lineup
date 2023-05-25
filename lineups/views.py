@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404
 from math import floor
 
 from .models import Lineup
@@ -24,8 +24,9 @@ MAX_SUB_CYCLES = 9
 # for the second half. The same player can play in both goalie slots. A future optimization is to provide more
 # flexibility with goalie substitutions.
 NUM_GOALIES = 2
-# The positions on the field. When we support other team sizes and team formations, this will need to evolve into
-# a "library" of player positions for each combination of team size and team formation.
+# The positions on the field.
+# TODO: When we support other team sizes and team formations, this will need to evolve into a "library" of player
+#  positions for each combination of team size and team formation.
 PLAYER_POSITIONS = ["left_full", "center_back", "sweeper", "right_full", "left_mid", "stopper", "attacking_mid",
                     "right_mid", "left_striker", "right_striker"]
 
@@ -68,15 +69,14 @@ def get_plays_there(request, players_present, positions, position_to_fill, playe
         for each_present in playing_time:
             if (each_present["name"] not in positions) and \
                     (each_present["playing_slots"] < each_present["total_playing_slots"]):
-                logging.info("5555 position: %s, player: %s", position_to_fill, each_present["name"])
+                logging.info("RANDOM position: %s, player: %s", position_to_fill, each_present["name"])
                 return each_present["name"]
-                break
     elif len(plays_there_and_present) == 1:
-        logging.info("6666 position: %s, player: %s", position_to_fill, plays_there_and_present[0].name)
+        logging.info("PLAYS_THERE position: %s, player: %s", position_to_fill, plays_there_and_present[0].name)
         return plays_there_and_present[0].name
     else:
         player_chosen = random.choice(plays_there_and_present).name
-        logging.info("7777 position: %s, player: %s", position_to_fill, player_chosen)
+        logging.info("PLAYS_THERE position: %s, player: %s", position_to_fill, player_chosen)
         return player_chosen
 
 
@@ -98,20 +98,163 @@ def get_player(request, players_present, positions, position_to_fill, players, p
         get_someone = get_plays_there(request, players_present, positions, position_to_fill, players, playing_time)
         return get_someone
     elif len(preferred_players) == 1:
-        logging.info("0000 position: %s, player: %s", position_to_fill, preferred_players[0])
+        logging.info("PREFERRED position: %s, player: %s", position_to_fill, preferred_players[0])
         return preferred_players[0]
     else:
         player_chosen = random.choice(preferred_players)
-        logging.info("1111 position: %s, player: %s", position_to_fill, player_chosen)
+        logging.info("PREFERRED position: %s, player: %s", position_to_fill, player_chosen)
         return player_chosen
 
 
-def get_team(request, players_present, players, positions, playing_time):
+def find_player_to_sub(last_lineup, playing_time):
+    # This is not a "view" function. It is a supporting function. Call this function to randomly choose a player to
+    # substitute from the current lineup. Choose a number between 2 and 11, as the index of the player to substitute.
+    # Ignore index 0, which is the "minute of the lineup" and ignore index 1, which is the goalkeeper.
+    position_to_sub = 2
+    found_sub = False
+    while not found_sub:
+        position_to_sub = random.randrange(2, 11)
+        logging.info("SUBSTITUTE: %s", position_to_sub)
+        player_to_sub = last_lineup[position_to_sub]
+        logging.info("SUBSTITUTE: %s", player_to_sub)
+        for player_time_check in playing_time:
+            if player_time_check["name"] == player_to_sub:
+                if player_time_check["sub_slots"] < player_time_check["total_sub_slots"]:
+                    #player_time_check["sub_slots"] += 1
+                    found_sub = True
+    return position_to_sub
+
+
+def get_possible_subs(players_present, existing_lineup):
+    # This is not a "view" function. It is a supporting function. Call this function to identify the players present
+    # who are not currently in the lineup. That is, use this function to identify possible players to substitute in.
+    subs_list = []
+    logging.info("GET SUBS LINEUP: %s", existing_lineup)
+    currently_playing = existing_lineup[1:]
+    for player in players_present:
+        if player[0] not in currently_playing:
+            subs_list.append(player[0])
+    logging.info("POTENTIAL SUBS: %s", subs_list)
+    return subs_list
+
+
+def sort_lineup(e):
+    # This is not a "view" function. It is a function that specifies how to sort the lineups, so we can get the most
+    # recently-generated lineup (into the first position, and easily access that most recent lineup).
+    return e[0]
+
+
+def get_team(request, players_present, players, positions, playing_time, lineup, num_minutes):
     # This is not a "view" function. It is a supporting function. Call this function to get a single lineup (for a
-    # portion of a game). This function iterates through each outfield position, and calls other functions to assign
-    # a player for that position.
-    for position_to_fill in PLAYER_POSITIONS:
-        positions.append(get_player(request, players_present, positions, position_to_fill, players, playing_time))
+    # portion of a game). For the first lineup, iterate through each outfield position, and call other functions to
+    # assign a player to that position. For subsequent lineups, choose players to substitute out from that team.
+    # This approach ensures minimal switching of positions for players over the course of a game.
+    if positions[0] == 0:
+        for position_to_fill in PLAYER_POSITIONS:
+            positions.append(get_player(request, players_present, positions, position_to_fill, players, playing_time))
+
+    else:
+        # Choose random players to substitute out.
+        # Need to know previous lineup.
+        logging.info("ALL LINEUPS: %s", lineup)
+        lineup.sort(key=sort_lineup, reverse=True)
+        last_lineup = lineup[0]
+        logging.info("LAST LINEUP: %s", last_lineup)
+
+        this_lineup = last_lineup[2:]
+
+        # If we get to the second half, make sure to change out the goalies before we determine the available subs.
+        if positions[0] >= int(num_minutes / 2):
+            old_goalie = last_lineup[1]
+            new_goalie = positions[1]
+            if new_goalie in last_lineup:
+                new_goalie_index = last_lineup.index(new_goalie)
+                last_lineup[new_goalie_index] = old_goalie
+            last_lineup[1] = new_goalie
+
+        possible_subs = get_possible_subs(players_present, last_lineup)
+
+        for each_player in possible_subs:
+            logging.info("PLAYER IN: %s", each_player)
+            player_object = Player.objects.get(name=each_player)
+            bring_player_in = False
+
+            # Make sure the substitute coming in has not fulfilled all of their playing slots.
+            for player_time_check in playing_time:
+                if player_time_check["name"] == player_object.name:
+                    if player_time_check["playing_slots"] < player_time_check["total_playing_slots"]:
+                        bring_player_in = True
+            logging.info("%s PLAYING SLOTS: %s of %s", player_object.name, player_time_check["playing_slots"], player_time_check["total_playing_slots"])
+
+            if bring_player_in:
+                # First, let's try to sub them into their preferred position.
+                sub_found = False
+                position_to_try = player_object.preferred_position
+                index_to_try = PLAYER_POSITIONS.index(position_to_try) + 2
+                player_to_try = last_lineup[index_to_try]
+                logging.info("POSITION TO TRY: %s", position_to_try)
+                logging.info("PLAYER TO TRY: %s", player_to_try)
+                player_object_to_try = Player.objects.get(name=player_to_try)
+
+                for player_time_check in playing_time:
+                    if player_time_check["name"] == player_object_to_try.name:
+                        if player_time_check["sub_slots"] < player_time_check["total_sub_slots"]:
+                            sub_found = True
+                            player_out = player_to_try
+                            player_time_check["sub_slots"] += 1
+                            this_lineup[index_to_try - 2] = each_player
+                            logging.info("PLAYER OUT: %s", player_out)
+
+                # If the player in their preferred position has reached their maximum number of substitutions,
+                # let's try the other positions they play.
+                if not sub_found:
+                    # Determine the positions the player coming in can play.
+                    player_positions = []
+                    for check_position in PLAYER_POSITIONS:
+                        boolean_check = "is_" + check_position
+                        if getattr(player_object, boolean_check):
+                            player_positions.append(check_position)
+                    logging.info("POSSIBLE POSITIONS: %s", player_positions)
+
+                    for check_position in player_positions:
+                        index_to_try = PLAYER_POSITIONS.index(check_position) + 2
+                        player_to_try = last_lineup[index_to_try]
+                        logging.info("POSITION TO TRY: %s", check_position)
+                        logging.info("PLAYER TO TRY: %s", player_to_try)
+                        player_object_to_try = Player.objects.get(name=player_to_try)
+
+                        for player_time_check in playing_time:
+                            if player_time_check["name"] == player_object_to_try.name:
+                                if player_time_check["sub_slots"] < player_time_check["total_sub_slots"]:
+                                    sub_found = True
+                                    player_out = player_to_try
+                                    player_time_check["sub_slots"] += 1
+                                    this_lineup[index_to_try - 2] = each_player
+                                    logging.info("PLAYER OUT: %s, PLAYER IN: %s", player_out, each_player)
+                                    break
+                        else:
+                            continue
+                        break
+
+                # If we have tried their preferred position and the positions they play, and we still haven't found
+                # someone to substitute try players at random. But make sure we don't try to substitute the goalie (with
+                # the last_lineup[1] check.)
+                if not sub_found:
+                    for player_time_check in playing_time:
+                        if player_time_check["sub_slots"] < player_time_check["total_sub_slots"] and \
+                                player_time_check["name"] != last_lineup[1]:
+                            sub_found = True
+                            player_out = player_time_check["name"]
+                            player_time_check["sub_slots"] += 1
+                            index_to_switch = this_lineup.index(player_out)
+                            this_lineup[index_to_switch] = each_player
+                            logging.info("PLAYER IN: %s, PLAYER OUT: %s", each_player, player_out)
+                            break
+
+        logging.info("NEW LINEUP: %s", this_lineup)
+        for new_player_position in this_lineup:
+            positions.append(new_player_position)
+
     return positions
 
 
@@ -193,14 +336,14 @@ def get_lineups(request, num_outfield, on_sideline, num_minutes, players_present
         positions = [minute]
         goalie = first_goalie
         positions.append(goalie)
-        lineup.append(get_team(request, players_present, players, positions, playing_time))
+        lineup.append(get_team(request, players_present, players, positions, playing_time, lineup, num_minutes))
 
         # This is the lineup for the second half.
         minute = team.half_duration
         positions = [minute]
         goalie = second_goalie
         positions.append(goalie)
-        lineup.append(get_team(request, players_present, players, positions, playing_time))
+        lineup.append(get_team(request, players_present, players, positions, playing_time, lineup, num_minutes))
 
     # If we have one or more subs...
     else:
@@ -212,14 +355,15 @@ def get_lineups(request, num_outfield, on_sideline, num_minutes, players_present
             else:
                 goalie = second_goalie
             positions.append(goalie)
-            positions = get_team(request, players_present, players, positions, playing_time)
-            logging.info(positions)
+            positions = get_team(request, players_present, players, positions, playing_time, lineup, num_minutes)
+            logging.info("GOT TEAM: %s", positions)
 
             for each_player in playing_time:
                 if each_player["name"] in positions:
                     each_player["playing_slots"] += 1
                 else:
-                    each_player["sub_slots"] += 1
+                    if i == 0:
+                        each_player["sub_slots"] += 1
             logging.info(playing_time)
             lineup.append(positions)
 

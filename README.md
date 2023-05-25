@@ -1,5 +1,5 @@
 # soccer_lineup
-#### Video Demo:  <URL HERE>
+#### Video Demo:  https://www.youtube.com/watch?v=JSshIOC_Nog
 #### Description:
 This website helps youth soccer coaches ensure all of their players get equal playing time.
 
