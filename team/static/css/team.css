@@ -61,47 +61,73 @@ td#leftmost-cell{
 
 .soccer_field{
     border-collapse: collapse;
-    margin: 25px 5px;
-    min-width: 400px;
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    background-color: mediumaquamarine;
+    margin: 20px 5px;
     text-align: center;
 }
 
-.soccer_pitch{
-    background:url("/static/images/pitch.jpeg");
-    background-repeat:no-repeat;
-    background-size: contain;
-}
-
-.soccer_field tr.row1{
-    height: 75px;
-}
-
-.soccer_field tr.row3{
-    height: 75px;
-}
-
-.soccer_field tr.row7{
-    height: 75px;
-}
-
-.soccer_field tr.row10{
-    height: 75px;
-}
-
-.soccer_field tr.row12{
+.soccer_field tr.first_row{
     height: 50px;
+}
+
+.soccer_field tr.spacer_row{
+    height: 40px;
+}
+
+.soccer_field tr.last_row{
+    height: 50px;
+}
+
+.soccer_field td.column1{
+    width: 30px;
+}
+
+.soccer_field td.column7{
+    width: 30px;
 }
 
 .soccer_field td{
     font-family: system-ui, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, Oxygen-Sans, Ubuntu, Cantarell, “Helvetica Neue”, Arial, sans-serif;
     color: #ffffff;
-    padding: 5px 16px;
+    padding: 5px 10px;
     text-align: center;
 }
 
-.soccer_field td.player{
-    /* font-weight: bold; */
+.soccer_field td.top_border{
+    border-top: solid 2px white;
+}
+
+.soccer_field td.left_border{
+    border-left: solid 2px white;
+}
+
+.soccer_field td.right_border{
+    border-right: solid 2px white;
+}
+
+.soccer_field td.left_corner{
+    border-left: solid 2px white;
+    border-top: solid 2px white;
+}
+
+.soccer_field td.right_corner{
+    border-right: solid 2px white;
+    border-top: solid 2px white;
+}
+
+.soccer_field td.end_line{
+    border-top: solid 2px white;
+}
+
+span.player_position{
+    color: white;
+    font-size: 0.8em;
+}
+
+span.player_name{
+    font-weight: bold;
+    font-size: 1em;
+    color: black;
 }
 
 input[type="checkbox"] {
@@ -124,3 +150,13 @@ td.left_span{
     font-size: 1.1em;
 }
 
+/* The following style allows us to have page breaks between lineups when printing them out */
+@media print {
+    .page_break { page-break-before: always; } /* page-break-after works, as well */
+}
+
+/* The following style ensures that the table background colors appear in the print outs */
+body{
+  -webkit-print-color-adjust:exact !important;
+  print-color-adjust:exact !important;
+}

@@ -120,7 +120,6 @@ def find_player_to_sub(last_lineup, playing_time):
         for player_time_check in playing_time:
             if player_time_check["name"] == player_to_sub:
                 if player_time_check["sub_slots"] < player_time_check["total_sub_slots"]:
-                    #player_time_check["sub_slots"] += 1
                     found_sub = True
     return position_to_sub
 
@@ -165,6 +164,7 @@ def get_team(request, players_present, players, positions, playing_time, lineup,
 
         # If we get to the second half, make sure to change out the goalies before we determine the available subs.
         if positions[0] >= int(num_minutes / 2):
+            logging.info("Minute: %s", positions[0])
             old_goalie = last_lineup[1]
             new_goalie = positions[1]
             if new_goalie in last_lineup:
@@ -255,6 +255,16 @@ def get_team(request, players_present, players, positions, playing_time, lineup,
         for new_player_position in this_lineup:
             positions.append(new_player_position)
 
+    # STATUS:
+    # =======
+    # The playing_slots and sub_slots appears to be working for 13 players.
+    # However, it does not appear to be working for 14 players. It looks like the setting for number of sub_slots is
+    # wrong because all players get 1 sub_slot, but they need to be substituted more than once.
+    # We need to test playing_slots and sub_slots for other team sizes.
+    # We are replacing the goalie in the substitutes immediately before halftime. It looks like we are "losing" the
+    # minute count, and adopting the minute count from the previous lineup.
+    # We may need to cater for situations where the substitutions don't happen at halftime, and the goalies need to
+    # be switched.
     return positions
 
 

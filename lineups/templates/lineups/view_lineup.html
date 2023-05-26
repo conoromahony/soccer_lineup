@@ -3,96 +3,132 @@
 {% block title %}View a Lineup{% endblock %}
 
 {% block content %}
-    <p><strong>{{ lineup.team_name }}</strong> against <strong>{{ lineup.opponent }}</strong> on <strong>{{ lineup.game_date }}</strong></p>
     {% for position in positions %}
-      <p>Minute: {{ position.0 }}</p>
+      <p>{{ lineup.team_name }} against {{ lineup.opponent }} on {{ lineup.game_date }}
+      <br /><strong>Minute: {{ position.0 }}</strong></p>
       <div class="soccer_pitch">
         <table class="soccer_field">
           <tr class="row1">
+            <td class="column1"></td>
             <td class="column2"></td>
             <td class="column3"></td>
             <td class="column4"></td>
             <td class="column5"></td>
             <td class="column6"></td>
+            <td class="column7"></td>
           </tr>
-          <tr class="row2">
+          <tr class="player_row">
+            <td class="right_border"></td>
             <td class="column2"></td>
-            <td class="column3 player"><span style="color: yellow">Left Striker:<br />{{ position.10 }}</span></td>
+            <td class="column3"><span class="player_position">Left Striker:</span>
+              <br /><span class="player_name">{{ position.10 }}</span></td>
             <td class="column4"></td>
-            <td class="column5 player"><span style="color: yellow">Right Striker:<br />{{ position.11 }}</span></td>
+            <td class="column5"><span class="player_position">Right Striker:</span>
+              <br /><span class="player_name">{{ position.11 }}</span></td>
             <td class="column6"></td>
+            <td class="left_border"></td>
           </tr>
-          <tr class="row3">
-            <td class="column2"></td>
-            <td class="column3"></td>
-            <td class="column4"></td>
-            <td class="column5"></td>
-            <td class="column6"></td>
-          </tr>
-          <tr class="row4">
-            <td class="column2"></td>
-            <td class="column3"></td>
-            <td class="column4 player"><span style="color: yellow">Attacking Mid:<br />{{ position.8 }}</span></td>
-            <td class="column5"></td>
-            <td class="column6"></td>
-          </tr>
-          <tr class="row5">
-            <td class="column2 player"><span style="color: yellow">Left Mid:<br />{{ position.6 }}</span></td>
-            <td class="column3"></td>
-            <td class="column4"></td>
-            <td class="column5"></td>
-            <td class="column6 player"><span style="color: yellow">Right Mid:<br />{{ position.9 }}</span></td>
-          </tr>
-          <tr class="row6">
-            <td class="column2"></td>
-            <td class="column3"></td>
-            <td class="column4 player"><span style="color: yellow">Defensive Mid:<br />{{ position.7 }}</span></td>
-            <td class="column5"></td>
-            <td class="column6"></td>
-          </tr>
-          <tr class="row7">
+          <tr class="spacer_row">
+            <td class="right_border"></td>
             <td class="column2"></td>
             <td class="column3"></td>
             <td class="column4"></td>
             <td class="column5"></td>
             <td class="column6"></td>
+            <td class="left_border"></td>
           </tr>
-          <tr class="row8">
+          <tr class="player_row">
+            <td class="right_border"></td>
             <td class="column2"></td>
-            <td class="column3 player"><span style="color: yellow">Left Center:<br />{{ position.3 }}</span></td>
-            <td class="column4"></td>
-            <td class="column5 player"><span style="color: yellow">Right Center:<br />{{ position.4 }}</span></td>
+            <td class="column3"></td>
+            <td class="column4"><span class="player_position">Attacking Mid:</span>
+              <br /><span class="player_name">{{ position.8 }}</span></td>
+            <td class="column5"></td>
             <td class="column6"></td>
+            <td class="left_border"></td>
           </tr>
-          <tr class="row9">
-            <td class="column2 player"><span style="color: yellow">Left Back:<br />{{ position.2 }}</span></td>
+          <tr class="player_row">
+            <td class="right_border"></td>
+            <td class="column2"><span class="player_position">Left Mid:</span>
+              <br /><span class="player_name">{{ position.6 }}</span></td>
             <td class="column3"></td>
             <td class="column4"></td>
             <td class="column5"></td>
-            <td class="column6 player"><span style="color: yellow">Right Back:<br />{{ position.5 }}</span></td>
+            <td class="column6"><span class="player_position">Right Mid:</span>
+              <br /><span class="player_name">{{ position.9 }}</span></td>
+            <td class="left_border"></td>
           </tr>
-          <tr class="row10">
+          <tr class="player_row">
+            <td class="right_border"></td>
+            <td class="column2"></td>
+            <td class="column3"></td>
+            <td class="column4"><span class="player_position">Defensive Mid:</span>
+              <br /><span class="player_name">{{ position.7 }}</span></td>
+            <td class="column5"></td>
+            <td class="column6"></td>
+            <td class="left_border"></td>
+          </tr>
+          <tr class="spacer_row">
+            <td class="right_border"></td>
             <td class="column2"></td>
             <td class="column3"></td>
             <td class="column4"></td>
             <td class="column5"></td>
             <td class="column6"></td>
+            <td class="left_border"></td>
           </tr>
-          <tr class="row11">
-            <td class="column2"></td>
-            <td class="column3"></td>
-            <td class="column4 player"><span style="color: yellow">Goalie:<br />{{ position.1 }}</span></td>
-            <td class="column5"></td>
-            <td class="column6"></td>
+          <tr class="player_row">
+            <td class="right_border"></td>
+            <td class="column2"><span class="player_position">Left Back:</span>
+              <br /><span class="player_name">{{ position.2 }}</span></td>
+            <td class="column3"><span class="player_position">Left Center:</span>
+              <br /><span class="player_name">{{ position.3 }}</span></td>
+            <td class="column4"></td>
+            <td class="column5"><span class="player_position">Right Center:</span>
+              <br /><span class="player_name">{{ position.4 }}</span></td>
+            <td class="column6"><span class="player_position">Right Back:</span>
+              <br /><span class="player_name">{{ position.5 }}</span></td>
+            <td class="left_border"></td>
           </tr>
-          <tr class="row12">
+          <tr class="spacer_row">
+            <td class="right_border"></td>
             <td class="column2"></td>
             <td class="column3"></td>
             <td class="column4"></td>
             <td class="column5"></td>
             <td class="column6"></td>
+            <td class="left_border"></td>
+          </tr>
+          <tr class="spacer_row">
+            <td class="right_border"></td>
+            <td class="column2"></td>
+            <td class="left_corner"></td>
+            <td class="top_border"></td>
+            <td class="right_corner"></td>
+            <td class="column6"></td>
+            <td class="left_border"></td>
+          </tr>
+          <tr class="player_row">
+            <td class="right_border"></td>
+            <td class="column2"></td>
+            <td class="left_border"></td>
+            <td class="column4"><span class="player_position">Goalie:</span>
+              <br /><span class="player_name">{{ position.1 }}</span></td>
+            <td class="right_border"></td>
+            <td class="column6"></td>
+            <td class="left_border"></td>
+          </tr>
+          <tr class="last_row">
+            <td></td>
+            <td class="end_line"></td>
+            <td class="end_line"></td>
+            <td class="end_line"></td>
+            <td class="end_line"></td>
+            <td class="end_line"></td>
+            <td></td>
           </tr>
         </table>
       </div>
+      <div class="page_break"> </div>
     {% endfor %}
 {% endblock %}
