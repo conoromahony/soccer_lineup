@@ -384,6 +384,7 @@ def view_lineup(request, name):
     lineup = get_object_or_404(Lineup, game_id=name)
     lineups = Lineup.objects.filter(owner=request.user)
     positions = ast.literal_eval(lineup.positions)
+    positions.sort(key=sort_lineup)
     # If the lineup is not in the lineups that are available to you???
     if lineup not in lineups:
         raise Http404
