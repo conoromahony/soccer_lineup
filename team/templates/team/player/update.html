@@ -22,92 +22,131 @@ be required=True unless the model has set them to be blank=True, in which case t
   <h1>{{ player.name }}</h1>
   <form action="" method="post">
       {% csrf_token %}
-      <div class="player-input">Preferred Position: {{ form.preferred_position }}</div>
+
+      <p>&nbsp;</p>
+
+      <p><em>For the preferred position, choose the position on the field the player most enjoys playing. If
+        the player does not have a preferred position, choose one for them. As a general rule, try not
+        to have too many players on your roster with the same preferred position, as it makes substitution
+        strategies a challenge.</em></p>
+
+      <div class="player-input"><strong>Preferred Position:</strong> {{ form.preferred_position }}</div>
+
+      <p>&nbsp;</p>
+
+      <p><em>Below, indicate the positions on the field the player is able to play by clicking on the check boxes.
+        As a general rule, the more positions you specify, the better it is when it comes to figuring out substitution
+        strategies.</em></p>
+
       <div class="soccer_pitch">
         <table class="soccer_field">
           <tr class="row1">
+            <td class="column1"></td>
             <td class="column2"></td>
             <td class="column3"></td>
             <td class="column4"></td>
             <td class="column5"></td>
             <td class="column6"></td>
+            <td class="column7"></td>
           </tr>
-          <tr class="row2">
+          <tr class="player_row">
+            <td class="right_border"></td>
             <td class="column2"></td>
-            <td class="column3 player">{{ form.is_left_striker }} Left Striker</td>
+            <td class="column3"><span class="player_name">{{ form.is_left_striker }} Left Striker</span></td>
             <td class="column4"></td>
-            <td class="column5 player">{{ form.is_right_striker }} Right Striker</td>
+            <td class="column5"><span class="player_name">{{ form.is_right_striker }} Right Striker</span></td>
             <td class="column6"></td>
+            <td class="left_border"></td>
           </tr>
-          <tr class="row3">
-            <td class="column2"></td>
-            <td class="column3"></td>
-            <td class="column4"></td>
-            <td class="column5"></td>
-            <td class="column6"></td>
-          </tr>
-          <tr class="row4">
-            <td class="column2"></td>
-            <td class="column3"></td>
-            <td class="column4 player">{{ form.is_attacking_mid }} Attacking Mid</td>
-            <td class="column5"></td>
-            <td class="column6"></td>
-          </tr>
-          <tr class="row5">
-            <td class="column2 player">{{ form.is_left_mid }} Left Mid</td>
-            <td class="column3"></td>
-            <td class="column4"></td>
-            <td class="column5"></td>
-            <td class="column6 player">{{ form.is_right_mid }} Right Mid</td>
-          </tr>
-          <tr class="row6">
-            <td class="column2"></td>
-            <td class="column3"></td>
-            <td class="column4 player">{{ form.is_stopper }} Defensive Mid</td>
-            <td class="column5"></td>
-            <td class="column6"></td>
-          </tr>
-          <tr class="row7">
+          <tr class="spacer_row">
+            <td class="right_border"></td>
             <td class="column2"></td>
             <td class="column3"></td>
             <td class="column4"></td>
             <td class="column5"></td>
             <td class="column6"></td>
+            <td class="left_border"></td>
           </tr>
-          <tr class="row8">
+          <tr class="player_row">
+            <td class="right_border"></td>
             <td class="column2"></td>
-            <td class="column3 player">{{ form.is_center_back }} Left CB</td>
-            <td class="column4"></td>
-            <td class="column5 player">{{ form.is_sweeper }} Right CB</td>
+            <td class="column3"></td>
+            <td class="column4"><span class="player_name">{{ form.is_attacking_mid }} Attacking Mid</span></td>
+            <td class="column5"></td>
             <td class="column6"></td>
+            <td class="left_border"></td>
           </tr>
-          <tr class="row9">
-            <td class="column2 player">{{ form.is_left_full }} Left Back</td>
+          <tr class="player_row">
+            <td class="right_border"></td>
+            <td class="column2"><span class="player_name">{{ form.is_left_mid }} Left Mid</span></td>
             <td class="column3"></td>
             <td class="column4"></td>
             <td class="column5"></td>
-            <td class="column6 player">{{ form.is_right_full }} Right Back</td>
+            <td class="column6"><span class="player_name">{{ form.is_right_mid }} Right Mid</span></td>
+            <td class="left_border"></td>
           </tr>
-          <tr class="row10">
+          <tr class="player_row">
+            <td class="right_border"></td>
+            <td class="column2"></td>
+            <td class="column3"></td>
+            <td class="column4"><span class="player_name">{{ form.is_stopper }} Defensive Mid</span></td>
+            <td class="column5"></td>
+            <td class="column6"></td>
+            <td class="left_border"></td>
+          </tr>
+          <tr class="spacer_row">
+            <td class="right_border"></td>
             <td class="column2"></td>
             <td class="column3"></td>
             <td class="column4"></td>
             <td class="column5"></td>
             <td class="column6"></td>
+            <td class="left_border"></td>
           </tr>
-          <tr class="row11">
-            <td class="column2"></td>
-            <td class="column3"></td>
-            <td class="column4 player">{{ form.is_goalie }} Goalie</td>
-            <td class="column5"></td>
-            <td class="column6"></td>
+          <tr class="player_row">
+            <td class="right_border"></td>
+            <td class="column2"><span class="player_name">{{ form.is_left_full }} Left Back</span></td>
+            <td class="column3"><span class="player_name">{{ form.is_center_back }} Left Center Back</span></td>
+            <td class="column4"></td>
+            <td class="column5"><span class="player_name">{{ form.is_sweeper }} Right Center Back</span></td>
+            <td class="column6"><span class="player_name">{{ form.is_right_full }} Right Back</span></td>
+            <td class="left_border"></td>
           </tr>
-          <tr class="row12">
+          <tr class="spacer_row">
+            <td class="right_border"></td>
             <td class="column2"></td>
             <td class="column3"></td>
             <td class="column4"></td>
             <td class="column5"></td>
             <td class="column6"></td>
+            <td class="left_border"></td>
+          </tr>
+          <tr class="spacer_row">
+            <td class="right_border"></td>
+            <td class="column2"></td>
+            <td class="left_corner"></td>
+            <td class="top_border"></td>
+            <td class="right_corner"></td>
+            <td class="column6"></td>
+            <td class="left_border"></td>
+          </tr>
+          <tr class="player_row">
+            <td class="right_border"></td>
+            <td class="column2"></td>
+            <td class="left_border"></td>
+            <td class="column4"><span class="player_name">{{ form.is_goalie }} Goalie</span></td>
+            <td class="right_border"></td>
+            <td class="column6"></td>
+            <td class="left_border"></td>
+          </tr>
+          <tr class="last_row">
+            <td></td>
+            <td class="end_line"></td>
+            <td class="end_line"></td>
+            <td class="end_line"></td>
+            <td class="end_line"></td>
+            <td class="end_line"></td>
+            <td></td>
           </tr>
         </table>
       </div>
