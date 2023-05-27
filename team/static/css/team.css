@@ -160,3 +160,13 @@ body{
   -webkit-print-color-adjust:exact !important;
   print-color-adjust:exact !important;
 }
+
+/* The following style makes sure that whatever is tagged with the accompanying class will not appear
+when printed out */
+@media print
+{
+    .no-print, .no-print *
+    {
+        display: none !important;
+    }
+}
