@@ -1,11 +1,40 @@
 {% extends "home/base.html" %}
+{% load mathfilters %}
+{% load my_tags %}
 
 {% block title %}View a Lineup{% endblock %}
 
 {% block content %}
     {% for position in positions %}
-      <p>{{ lineup.team_name }} against {{ lineup.opponent }} on {{ lineup.game_date }}
-      <br /><strong>Minute: {{ position.0 }}</strong></p>
+      <p>{{ lineup.team_name }} against {{ lineup.opponent }} on {{ lineup.game_date }}</p>
+      <p><strong>Minute {{ position.0 }}:</strong><br />
+      <span id="subs_list_{{ forloop.counter }}"></span>
+      <script type="text/javascript">
+        if ({{ position.0 }} != 0) {
+          {% with lineup_index=forloop.counter0 %}
+            var curr_lineup = {{ positions|get_at_index:lineup_index|safe }}
+          {% endwith %}
+          {% with prev_index=forloop.counter0|sub:1 %}
+            var prev_lineup = {{ positions|get_at_index:prev_index|safe }}
+          {% endwith %}
+          for (let i = 1; i < curr_lineup.length; i++) {
+            if (curr_lineup[i] != prev_lineup[i]) {
+              var tag = document.createElement("span");
+              var emphasis = document.createElement("strong");
+              var player_in = document.createTextNode(`${curr_lineup[i]} `);
+              emphasis.appendChild(player_in);
+              tag.appendChild(emphasis);
+              var player_out = document.createTextNode(` for ${prev_lineup[i]}`);
+              tag.appendChild(player_out);
+              var element = document.getElementById("subs_list_{{ forloop.counter }}");
+              element.appendChild(tag);
+              var newline = document.createElement("br");
+              element.appendChild(newline);
+            }
+          }
+        };
+      </script></p>
+      <p><span class="substitutes"></span></p>
       <div class="soccer_pitch">
         <table class="soccer_field">
           <tr class="row1">

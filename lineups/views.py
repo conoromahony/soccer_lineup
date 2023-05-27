@@ -484,3 +484,4 @@ def new_lineup(request):
         form = NewLineupForm(choices=possible_goalies)
 
     return render(request, 'lineups/new_lineup.html', {'form': form, 'team': team, 'players': players})
+
