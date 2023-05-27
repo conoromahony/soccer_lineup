@@ -157,14 +157,13 @@ def get_team(request, players_present, players, positions, playing_time, lineup,
         # Need to know previous lineup.
         logging.info("ALL LINEUPS: %s", lineup)
         lineup.sort(key=sort_lineup, reverse=True)
-        last_lineup = lineup[0]
+        last_lineup = list(lineup[0])
         logging.info("LAST LINEUP: %s", last_lineup)
 
         this_lineup = last_lineup[2:]
 
         # If we get to the second half, make sure to change out the goalies before we determine the available subs.
         if positions[0] >= int(num_minutes / 2):
-            logging.info("Minute: %s", positions[0])
             old_goalie = last_lineup[1]
             new_goalie = positions[1]
             if new_goalie in last_lineup:
